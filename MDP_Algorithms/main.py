@@ -1,9 +1,8 @@
 import pygame
 import math
-from Rpi import send_data
 from utils import scale_image,blit_rotate_center
 # from MDP_Simulator.Graph.graph import  a_star_search_multiple_obstacles, add_obstacle_attribute , get_goal_nodes,add_side_attribute, make_obstacle_edges_infinite,get_point_before_goal
-from MDP_Simulator.Graph.graph_new import GridGraph
+from graph_new import GridGraph
 
 # Initialize pygame
 

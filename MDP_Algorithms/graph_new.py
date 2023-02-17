@@ -1,6 +1,9 @@
 import math
 import matplotlib.pyplot as plt
 import heapq
+#import from rpi.py file which is outside the directory
+# from Rpi import send_data , receive_data
+
 
 
 class GridGraph:
@@ -36,9 +39,10 @@ class GridGraph:
 						self.weights[(vertex, neighbor_vertex)] = self.default_weight
 
 	# Add an attribute('Obstacle') to a vertex and the side of the target, also update the weights of the edges of the obstacle vertex to infinity
-	def add_attribute(self, vertex, attribute, side=None):
+	def add_attribute(self, vertex, attribute, side):
 		if attribute == 'obstacle':
 			self.attributes[vertex] = {'obstacle': True}
+			# self.attributes[vertex] = {'obstacleID': obstacleID}
 			self.attributes[vertex[0] + 1, vertex[1]] = {'wall': True}
 			self.attributes[vertex[0], vertex[1] - 1] = {'wall': True}
 			self.attributes[vertex[0] + 1, vertex[1] - 1] = {'wall': True}
@@ -293,9 +297,12 @@ class GridGraph:
 		else:
 			return "180 Turn"
 
-
+# '[[1,(4,3),"N']- ]
 
 grid_graph = GridGraph(20, 20)
+grid_graph.add_attribute((18, 5), 'obstacle', side='W')
+grid_graph.add_attribute((2, 7), 'obstacle', side='N')
+grid_graph.add_attribute((12, 17), 'obstacle', side='W')
 grid_graph.add_attribute((10, 5), 'obstacle', side='S')
 grid_graph.add_attribute((14, 7), 'obstacle', side='N')
 grid_graph.add_attribute((6, 17), 'obstacle', side='W')
@@ -327,3 +334,6 @@ print(grid_graph.movement_instructions(grid_graph.summarize_path(path), "North")
 #remove all instance of W, 0 in route
 route = [x for x in route if x != ['W', 0]]
 print(route)
+obs = receive_data('0.0.0.0',12345)
+print("FROM RPI " , obs)
+send_data(route)
