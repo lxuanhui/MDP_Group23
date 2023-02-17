@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="475dp"
+    android:layout_height="220dp"
+    android:background="@color/colorGray">
+
+
+    <ImageButton
+        android:id="@+id/carBtn"
+        android:layout_width="108dp"
+        android:layout_height="49dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/border_black_state"
+        android:contentDescription="@string/set_car_coordinates"
+        android:padding="10dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/car_face_up"
+        android:text="@string/set_car_coordinates"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/carDirBtn"
+        android:layout_width="108dp"
+        android:layout_height="49dp"
+        android:layout_marginStart="156dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/border_black_state"
+        android:contentDescription="@string/set_car_direction"
+        android:padding="10dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/compass"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <ImageButton
+        android:id="@+id/obsBtn"
+        android:layout_width="108dp"
+        android:layout_height="49dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="120dp"
+        android:background="@drawable/border_black_state"
+        android:contentDescription="@string/set_obstacle"
+        android:padding="10dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/obstacle2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Switch
+        android:id="@+id/dragSwitch"
+        android:layout_width="108dp"
+        android:layout_height="49dp"
+        android:layout_marginStart="156dp"
+        android:layout_marginTop="120dp"
+        android:background="@drawable/border_black"
+        android:text="  Drag\n Obstacles"
+        android:textColor="@color/black"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/resetBtn"
+        android:layout_width="148dp"
+        android:layout_height="44dp"
+        android:layout_marginStart="308dp"
+        android:layout_marginTop="56dp"
+        android:background="@drawable/border_black_state"
+        android:contentDescription="@string/reset_Map"
+        android:padding="10dp"
+        android:text="@string/reset_Map"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/sendMapBtn"
+        android:layout_width="148dp"
+        android:layout_height="44dp"
+        android:layout_marginStart="308dp"
+        android:layout_marginTop="108dp"
+        android:background="@drawable/border_black_state"
+        android:contentDescription="@string/send_Map"
+        android:padding="10dp"
+        android:text="@string/send_Map"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="108dp"
+        android:layout_height="29dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="2dp"
+        android:text="@string/set_car_coordinates"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/carBtn" />
+
+    <TextView
+        android:id="@+id/textViewCarDir"
+        android:layout_width="108dp"
+        android:layout_height="29dp"
+        android:layout_marginStart="156dp"
+        android:layout_marginTop="2dp"
+        android:text="@string/set_car_direction"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/carDirBtn" />
+
+    <TextView
+        android:id="@+id/textViewObs"
+        android:layout_width="108dp"
+        android:layout_height="29dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="2dp"
+        android:text="@string/set_obstacle"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/obsBtn" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
