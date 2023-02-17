@@ -36,9 +36,9 @@ class GridGraph:
 						self.weights[(vertex, neighbor_vertex)] = self.default_weight
 
 	# Add an attribute('Obstacle') to a vertex and the side of the target, also update the weights of the edges of the obstacle vertex to infinity
-	def add_attribute(self, vertex, attribute, side=None):
+	def add_attribute(self, vertex, attribute, side, obstacleID):
 		if attribute == 'obstacle':
-			self.attributes[vertex] = {'obstacle': True}
+			self.attributes[vertex] = {'obstacle': True, 'obstacleID': obstacleID}
 			self.attributes[vertex[0] + 1, vertex[1]] = {'wall': True}
 			self.attributes[vertex[0], vertex[1] - 1] = {'wall': True}
 			self.attributes[vertex[0] + 1, vertex[1] - 1] = {'wall': True}
@@ -296,9 +296,12 @@ class GridGraph:
 
 
 grid_graph = GridGraph(20, 20)
-grid_graph.add_attribute((10, 5), 'obstacle', side='S')
-grid_graph.add_attribute((14, 7), 'obstacle', side='N')
-grid_graph.add_attribute((6, 17), 'obstacle', side='W')
+grid_graph.add_attribute((10, 5), 'obstacle', 'S', 1)
+grid_graph.add_attribute((14, 7), 'obstacle', 'N', 2)
+grid_graph.add_attribute((6, 17), 'obstacle', 'W', 3)
+grid_graph.add_attribute((15, 15), 'obstacle', 'E', 4)
+grid_graph.add_attribute((10, 10), 'obstacle', 'S', 5)
+grid_graph.add_attribute((14, 12), 'obstacle', 'N', 6)
 
 print(grid_graph.get_obstacle_vertices())
 print(grid_graph.get_goals(grid_graph.get_obstacle_vertices()))
@@ -307,11 +310,11 @@ grid_graph.plot(
 	path=grid_graph.a_star_search_multiple_obstacles((0, 0), grid_graph.get_goals(grid_graph.get_obstacle_vertices())))
 print(grid_graph.a_star_search_multiple_obstacles((0, 0), grid_graph.get_goals(
 	grid_graph.get_obstacle_vertices())))
-
-print(grid_graph.get_edge_weights((13,8)))
-print(grid_graph.get_edge_weights((14,6)))
-print(grid_graph.get_edge_weights((15,6)))
-print(grid_graph.get_edge_weights((15,7)))
+#
+# print(grid_graph.get_edge_weights((13,8)))
+# print(grid_graph.get_edge_weights((14,6)))
+# print(grid_graph.get_edge_weights((15,6)))
+# print(grid_graph.get_edge_weights((15,7)))
 
 path = grid_graph.a_star_search_multiple_obstacles((0, 0), grid_graph.get_goals(grid_graph.get_obstacle_vertices()))
 # threshold_angle = 45
@@ -322,8 +325,5 @@ path = grid_graph.a_star_search_multiple_obstacles((0, 0), grid_graph.get_goals(
 # 	print(f"From {path[i - 1]} to {path[i]}: {turn_type}")
 # 	previous_direction = current_direction
 print(grid_graph.summarize_path(path))
-route = grid_graph.movement_instructions(grid_graph.summarize_path(path), "North")
+
 print(grid_graph.movement_instructions(grid_graph.summarize_path(path), "North"))
-#remove all instance of W, 0 in route
-route = [x for x in route if x != ['W', 0]]
-print(route)
