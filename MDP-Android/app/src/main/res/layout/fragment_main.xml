@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!--    Please do not edit margins for Below -->
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:src="@drawable/white_background"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="0dp" />
+
+    <LinearLayout
+        android:layout_width="100dp"
+        android:layout_height="75dp"
+        android:layout_marginStart="500dp"
+        android:layout_marginTop="116dp"
+        android:background="@drawable/border_black"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/bluetoothConnectedDevice"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="500dp"
+        android:layout_marginTop="144dp"
+        android:gravity="center"
+        android:text=""
+        android:textAlignment="center"
+        android:textColor="@color/colorBlack"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:layout_width="100dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="500dp"
+        android:layout_marginTop="80dp"
+        android:background="@drawable/statusbar"
+        android:gravity="center"
+        android:text="BLUETOOTH"
+        android:textAlignment="center"
+        android:textColor="@color/colorBlack"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/bluetoothStatus2"
+        android:layout_width="100dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="500dp"
+        android:layout_marginTop="116dp"
+        android:gravity="center"
+        android:text="@string/bluetooth_connection"
+        android:textAlignment="center"
+        android:textColor="@android:color/holo_red_dark"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/robotStatus"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="500dp"
+        android:layout_marginTop="236dp"
+        android:background="@drawable/border_black"
+        android:gravity="center"
+        android:text="Ready to Start"
+        android:textAlignment="center"
+        android:textColor="@color/colorBlack"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/directionLabel"
+        android:layout_width="100dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="500dp"
+        android:layout_marginTop="300dp"
+        android:background="@drawable/statusbar"
+        android:gravity="center"
+        android:text="DIRECTION"
+        android:textAlignment="center"
+        android:textColor="@color/colorBlack"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/directionAxisTextView"
+        android:layout_width="100dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="500dp"
+        android:layout_marginTop="336dp"
+        android:background="@drawable/border_black"
+        android:gravity="center"
+        android:text="NORTH"
+        android:textAlignment="center"
+        android:textColor="@color/colorBlack"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/CoordsLabel"
+        android:layout_width="100dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="500dp"
+        android:layout_marginTop="376dp"
+        android:background="@drawable/statusbar"
+        android:gravity="center"
+        android:text="COORDINATES"
+        android:textAlignment="center"
+        android:textColor="@color/colorBlack"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="500dp"
+        android:layout_marginTop="415dp"
+        android:background="@drawable/border_black"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/robotX"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="460dp"
+        android:layout_marginTop="415dp"
+        android:gravity="center"
+        android:paddingStart="20dp"
+        android:text="X:"
+        android:textAlignment="center"
+        android:textColor="@color/colorBlack"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/xAxisTextView"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="460dp"
+        android:layout_marginTop="415dp"
+        android:gravity="center"
+        android:paddingStart="50dp"
+        android:text="1"
+        android:textColor="@color/colorBlack"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/robotY"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="500dp"
+        android:layout_marginTop="415dp"
+        android:gravity="center"
+        android:paddingStart="20dp"
+        android:text="Y:"
+        android:textAlignment="center"
+        android:textColor="@color/colorBlack"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/yAxisTextView"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="500dp"
+        android:layout_marginTop="415dp"
+        android:gravity="center"
+        android:paddingStart="50dp"
+        android:text="0"
+        android:textColor="@color/colorBlack"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:layout_width="100dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="500dp"
+        android:layout_marginTop="200dp"
+        android:background="@drawable/statusbar"
+        android:gravity="center"
+        android:text="ROBOT STATUS"
+        android:textAlignment="center"
+        android:textColor="@color/colorBlack"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/ArenaRecycler"
+        android:layout_width="483dp"
+        android:layout_height="485dp"
+        android:layout_marginTop="36dp"
+        android:layout_marginEnd="115dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!--    PLease do not edit margins for Above -->
+
+    <!--    Controller Buttons-->
+
+
+    <ImageView
+        android:id="@+id/Car"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="454dp"
+        android:layout_marginEnd="528dp"
+        android:foreground="@drawable/car_face_up"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <ImageButton
+        android:id="@+id/Up"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@color/transparent"
+        android:foreground="@drawable/arrow_up_faced_state"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.907"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.63" />
+
+    <ImageButton
+        android:id="@+id/Down"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@color/transparent"
+        android:foreground="@drawable/arrow_down_faced_state"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.907"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.74" />
+
+    <!--    Controller Buttons-->
+
+    <ImageButton
+        android:id="@+id/Left"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@color/transparent"
+        android:foreground="@drawable/arrow_left_faced_state"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.816"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.686" />
+
+    <ImageButton
+        android:id="@+id/Right"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@color/transparent"
+        android:foreground="@drawable/arrow_right_faced_state"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.998"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.686" />
+
+    <!--    <ImageView-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="match_parent"-->
+    <!--        android:scaleType="fitXY"-->
+    <!--        android:src="@drawable/white_background"-->
+    <!--        tools:layout_editor_absoluteX="0dp"-->
+    <!--        tools:layout_editor_absoluteY="0dp" />-->
+    <!--<androidx.appcompat.widget.LinearLayoutCompat-->
+
+    <!--    <include-->
+    <!--        android:id="@+id/include"-->
+    <!--        layout="@layout/fragment_map"-->
+    <!--        android:layout_width="472dp"-->
+    <!--        android:layout_height="207dp"-->
+    <!--        android:layout_marginStart="4dp"-->
+    <!--        android:layout_marginBottom="16dp"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent" />-->
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabs"
+        android:layout_width="472dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginBottom="223dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:tabTextColor="@color/black"
+        app:tabGravity="center"
+        app:tabMode="scrollable"
+        app:tabMinWidth="130dp"
+        app:tabIndicatorGravity="stretch"
+        app:tabSelectedTextColor="@color/colorBlack"
+        app:tabRippleColor="@null"
+        app:tabIndicatorColor="@null"
+        app:tabIndicatorAnimationMode="elastic"
+        app:tabIndicator="@drawable/tab_selected"/>
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/pager"
+        android:layout_width="472dp"
+        android:layout_height="207dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

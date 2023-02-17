@@ -334,6 +334,3 @@ print(grid_graph.movement_instructions(grid_graph.summarize_path(path), "North")
 #remove all instance of W, 0 in route
 route = [x for x in route if x != ['W', 0]]
 print(route)
-obs = receive_data('0.0.0.0',12345)
-print("FROM RPI " , obs)
-send_data(route)
