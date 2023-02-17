@@ -322,5 +322,8 @@ path = grid_graph.a_star_search_multiple_obstacles((0, 0), grid_graph.get_goals(
 # 	print(f"From {path[i - 1]} to {path[i]}: {turn_type}")
 # 	previous_direction = current_direction
 print(grid_graph.summarize_path(path))
-
+route = grid_graph.movement_instructions(grid_graph.summarize_path(path), "North")
 print(grid_graph.movement_instructions(grid_graph.summarize_path(path), "North"))
+#remove all instance of W, 0 in route
+route = [x for x in route if x != ['W', 0]]
+print(route)
