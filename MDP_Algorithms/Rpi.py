@@ -52,10 +52,10 @@
 #
 # obs = receive_data('0.0.0.0',1234)
 # print("FROM RPI " , obs)
-
+import json
 import socket
 from time import sleep
-
+from graph_new import GridGraph
 serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 host = socket.gethostbyname(socket.gethostname())
 # host = socket.gethostbyname("")
@@ -72,8 +72,17 @@ while 1:
     print("connection found!")
     data = clientsocket.recv(1024).decode()
     print(data)
-    sleep(5)
+    grid = GridGraph(21, 21)
+    obstacleList = data.split("#")
+    for obstacle in obstacleList:
+        obstacle = json.loads(obstacle)
+    for obj in obstacleList:
+        grid.add_attribute((obj['obstacle'][1][0],obj['obstacle'][1][1]), "obstacle", obj['obstacle'][2], obj['obstacle'][0])
+    path = grid.a_star_search_multiple_obstacles((0, 2), grid.get_goals(grid.get_obstacle_vertices()))
+    route = grid.movement_instructions(grid.summarize_path(path, grid.get_goals(grid.get_obstacle_vertices())), "North")
+    route = [x for x in route if x != ['W', 0]]
 
-    clientsocket.send("This is the path".encode())
+
+    clientsocket.send(route.encode())
 
 
