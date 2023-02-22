@@ -11,6 +11,7 @@ import com.example.mdp.arena.OnCellClickListener;
 import com.example.mdp.arena.Player;
 import com.example.mdp.arena.RecyclerAdapter;
 import com.example.mdp.chat.ChatFragment;
+import com.example.mdp.timer.TimerFragment;
 
 import java.util.List;
 
@@ -39,8 +40,8 @@ public class MyFragmentStateAdapter extends FragmentStateAdapter {
                     return new MapTabFragment(gridRecyclerView, carPlayer);
                 case 1:
                     return new ChatFragment();
-//                case 2:
-//                   return new MapTabFragment();
+                case 2:
+                   return new TimerFragment();
                 default:
                    return new MainFragment();
             }
@@ -48,6 +49,6 @@ public class MyFragmentStateAdapter extends FragmentStateAdapter {
 
     @Override
     public int getItemCount() {
-        return 2;
+        return 3;
     }
 }

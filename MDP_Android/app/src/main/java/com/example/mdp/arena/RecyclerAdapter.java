@@ -79,10 +79,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MineTi
     }
 
     public void setImgId(int imgId, int pos){
-        Cell cell = grid.get(pos);
-        cell.setImgID(imgId);
-        notifyItemChanged(pos);
-//        notifyDataSetChanged();
+        grid.get(pos).setImgID(imgId);
+//        notifyItemChanged(pos);
+        notifyDataSetChanged();
 
     }
 
