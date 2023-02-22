@@ -71,18 +71,24 @@ while 1:
     print(address)
     print("connection found!")
     data = clientsocket.recv(1024).decode()
-    print(data)
+    print("rec",data)
+    print(type(data))
     grid = GridGraph(21, 21)
-    obstacleList = data.split("#")
+    obstacleList = data.split("^")
+    print("OBS List " ,type(obstacleList))
     for obstacle in obstacleList:
-        obstacle = json.loads(obstacle)
+        obstacle = eval(obstacle)
+        print("obstacle",type(obstacle))
     for obj in obstacleList:
         grid.add_attribute((obj['obstacle'][1][0],obj['obstacle'][1][1]), "obstacle", obj['obstacle'][2], obj['obstacle'][0])
     path = grid.a_star_search_multiple_obstacles((0, 2), grid.get_goals(grid.get_obstacle_vertices()))
     route = grid.movement_instructions(grid.summarize_path(path, grid.get_goals(grid.get_obstacle_vertices())), "North")
     route = [x for x in route if x != ['W', 0]]
+    delim = "#"
+    result = ''
+    for i in route :
+        result = result +str(i)+delim
 
-
-    clientsocket.send(route.encode())
+    clientsocket.send(result.encode())
 
 
