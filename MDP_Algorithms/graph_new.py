@@ -97,7 +97,7 @@ class GridGraph:
 				for neighbor in self.grid[(row + 1, col + 2)]:
 					self.weights[((row + 1, col + 2), neighbor)] = float('inf')
 					self.weights[(neighbor, (row + 1, col + 2))] = float('inf')
-				return (row, col + 2)
+				return ((row, col + 2),'S')
 			except KeyError:
 				if row - 1 < 0:
 					self.attributes[(row + 1, col + 1)]['wall'] = True
@@ -108,7 +108,7 @@ class GridGraph:
 					for neighbor in self.grid[(row + 1, col + 2)]:
 						self.weights[((row + 1, col + 2), neighbor)] = float('inf')
 						self.weights[(neighbor, (row + 1, col + 2))] = float('inf')
-					return (row, col + 2)
+					return ((row, col + 2), 'S')
 				elif row + 1 >= 20 :
 					self.attributes[(row - 1, col + 1)]['wall'] = True
 					self.attributes[(row - 1, col + 2)]['wall'] = True
@@ -118,7 +118,7 @@ class GridGraph:
 					for neighbor in self.grid[(row - 1, col + 2)]:
 						self.weights[((row - 1, col + 2), neighbor)] = float('inf')
 						self.weights[(neighbor, (row - 1, col + 2))] = float('inf')
-					return (row, col + 2)
+					return ((row, col + 2), 'S')
 		elif side == 'S':
 			try:
 				self.attributes[(row - 1, col - 2)]['wall'] = True
@@ -137,7 +137,7 @@ class GridGraph:
 				for neighbor in self.grid[(row + 1, col - 3)]:
 					self.weights[((row + 1, col - 3), neighbor)] = float('inf')
 					self.weights[(neighbor, (row + 1, col - 3))] = float('inf')
-				return (row, col - 3)
+				return ((row, col - 3),'N')
 			except KeyError:
 				if row - 1 < 0:
 					self.attributes[(row + 1, col - 2)]['wall'] = True
@@ -148,7 +148,7 @@ class GridGraph:
 					for neighbor in self.grid[(row + 1, col - 3)]:
 						self.weights[((row + 1, col - 3), neighbor)] = float('inf')
 						self.weights[(neighbor, (row + 1, col - 3))] = float('inf')
-					return (row, col - 3)
+					return ((row, col - 3), 'N')
 				elif row + 1 >= 20:
 					self.attributes[(row - 1, col - 2)]['wall'] = True
 					self.attributes[(row - 1, col - 3)]['wall'] = True
@@ -158,7 +158,7 @@ class GridGraph:
 					for neighbor in self.grid[(row - 1, col - 3)]:
 						self.weights[((row - 1, col - 3), neighbor)] = float('inf')
 						self.weights[(neighbor, (row - 1, col - 3))] = float('inf')
-					return (row, col - 3)
+					return ((row, col - 3), 'N')
 
 		elif side == 'E':
 			try:
@@ -178,7 +178,7 @@ class GridGraph:
 				for neighbor in self.grid[(row + 3, col - 1)]:
 					self.weights[((row + 3, col - 1), neighbor)] = float('inf')
 					self.weights[(neighbor, (row + 3, col - 1))] = float('inf')
-				return (row + 3, col)
+				return ((row + 3, col), 'W')
 			except KeyError:
 				if col + 1 >= 21:
 					self.attributes[(row + 2, col - 1)]['wall'] = True
@@ -189,7 +189,7 @@ class GridGraph:
 					for neighbor in self.grid[(row + 3, col - 1)]:
 						self.weights[((row + 3, col - 1), neighbor)] = float('inf')
 						self.weights[(neighbor, (row + 3, col - 1))] = float('inf')
-					return (row + 3, col)
+					return ((row + 3, col), 'W')
 				elif col - 1 < 0:
 					self.attributes[(row + 2, col + 1)]['wall'] = True
 					self.attributes[(row + 3, col + 1)]['wall'] = True
@@ -199,7 +199,7 @@ class GridGraph:
 					for neighbor in self.grid[(row + 3, col + 1)]:
 						self.weights[((row + 3, col + 1), neighbor)] = float('inf')
 						self.weights[(neighbor, (row + 3, col + 1))] = float('inf')
-					return (row + 3, col)
+					return ((row + 3, col), 'W')
 		elif side == 'W':
 			try:
 				self.attributes[(row - 1, col + 1)]['wall'] = True
@@ -218,7 +218,7 @@ class GridGraph:
 				for neighbor in self.grid[(row - 2, col - 1)]:
 					self.weights[((row - 2, col - 1), neighbor)] = float('inf')
 					self.weights[(neighbor, (row - 2, col - 1))] = float('inf')
-				return (row - 2, col)
+				return ((row - 2, col), 'E')
 			except KeyError:
 				if col + 1 >= 21:
 					self.attributes[(row - 1, col - 1)]['wall'] = True
@@ -229,7 +229,7 @@ class GridGraph:
 					for neighbor in self.grid[(row - 2, col - 1)]:
 						self.weights[((row - 2, col - 1), neighbor)] = float('inf')
 						self.weights[(neighbor, (row - 2, col - 1))] = float('inf')
-					return (row - 2, col)
+					return ((row - 2, col), 'E')
 				elif col - 1 < 0:
 					self.attributes[(row - 1, col + 1)]['wall'] = True
 					self.attributes[(row - 2, col + 1)]['wall'] = True
@@ -239,10 +239,7 @@ class GridGraph:
 					for neighbor in self.grid[(row - 2, col + 1)]:
 						self.weights[((row - 2, col + 1), neighbor)] = float('inf')
 						self.weights[(neighbor, (row - 2, col + 1))] = float('inf')
-					return (row - 2, col)
-
-
-
+					return ((row - 2, col), 'E')
 
 	def get_goals(self, obstacle_vertices):
 		return [self.get_obstacle_side_node(obstacle_vertex) for obstacle_vertex in obstacle_vertices]
@@ -349,7 +346,7 @@ class GridGraph:
 	def get_shortest_path(self, start, goals):
 		paths = []
 		for goal in goals:
-			path = self.a_star(start, goal)
+			path = self.a_star(start, goal[0])
 			if path is not None:
 				paths.append(path)
 		if paths:
@@ -360,13 +357,22 @@ class GridGraph:
 	def a_star_search_multiple_obstacles(self, start, goals):
 
 		final_path = []
+		counter = 0
+		# while counter < len(goals):
 		while True:
 			path = self.get_shortest_path(start, goals)
+			print("GPAL " , goals)
+			print(path)
 			if path is None:
 				break
 			final_path.extend(path)
 			start = path[-1]
-			goals.remove(path[-1])
+			# goals.remove(path[-1])
+			#look through goals to check if its same as start and remove it
+			for i in range(len(goals)):
+				if goals[i][0] == start:
+					goals.remove(goals[i])
+					break
 		return final_path
 
 	# function to caluclate how many nodes traveled in a straight line before changing direction
@@ -389,7 +395,13 @@ class GridGraph:
 				direction = "West"
 			else:
 				continue
-			if path[i + 1] in goal_nodes:
+			goalfound = False
+			for g in goal_nodes:
+				if path[i + 1] == g[0]:
+					goal_nodes.remove(g)
+					goalfound = True
+					break
+			if goalfound:
 				commands.append([direction, round(distance, 2), "goal next"])
 			else:
 				commands.append([direction, round(distance, 2), "goal not next"])
@@ -401,6 +413,12 @@ class GridGraph:
 		for command in commands:
 			if command[0] == current_direction:
 				counter += 1
+				if command[2] == "goal next":
+					instruction_list.append(['W', counter])
+					instruction_list.append(['goal next'])
+					current_direction = command[0]
+					counter = 0
+
 			else:
 				instruction_list.append(['W', counter])
 				instruction_list.append([self.check_next_direction(current_direction, command[0]), 1])
@@ -436,10 +454,10 @@ class GridGraph:
 grid_graph = GridGraph(20, 20)
 grid_graph.add_attribute((3, 8), 'obstacle', 'S', 1)
 grid_graph.add_attribute((3, 12), 'obstacle', 'N', 2)
-grid_graph.add_attribute((5, 14), 'obstacle', 'W', 3)
+
 grid_graph.add_attribute((3, 16), 'obstacle', 'S', 4)
-# grid_graph.add_attribute((14, 7), 'obstacle', 'N', 5)
-# grid_graph.add_attribute((6, 17), 'obstacle', 'W', 6)
+grid_graph.add_attribute((14, 7), 'obstacle', 'N', 5)
+grid_graph.add_attribute((6, 17), 'obstacle', 'W', 6)
 
 print(grid_graph.get_obstacle_vertices())
 print(grid_graph.get_goals(grid_graph.get_obstacle_vertices()))
