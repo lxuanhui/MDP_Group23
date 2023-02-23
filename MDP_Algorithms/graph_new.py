@@ -21,6 +21,7 @@ class GridGraph:
 			'W': (-1, 0),
 			'E': (1, 0)
 		}
+		self.order = []
 
 		# Create vertices for each cell in the grid
 		for row in range(self.rows):
@@ -42,7 +43,7 @@ class GridGraph:
 	# Add an attribute('Obstacle') to a vertex and the side of the target, also update the weights of the edges of the obstacle vertex to infinity
 	def add_attribute(self, vertex, attribute, side, obstacleID):
 		if attribute == 'obstacle':
-			self.attributes[vertex] = {'obstacle': True, 'obstacleID:': obstacleID}
+			self.attributes[vertex] = {'obstacle': True, 'obstacleID': obstacleID}
 			self.attributes[vertex[0] + 1, vertex[1]] = {'wall': True}
 			self.attributes[vertex[0], vertex[1] - 1] = {'wall': True}
 			self.attributes[vertex[0] + 1, vertex[1] - 1] = {'wall': True}
@@ -78,7 +79,8 @@ class GridGraph:
 	def get_obstacle_side_node(self, obstacle_vertex):
 		side = self.attributes[obstacle_vertex]['side']
 		row, col = obstacle_vertex
-
+		# get obstacleId
+		obstacleID = self.attributes[obstacle_vertex]['obstacleID']
 		if side == 'N':
 			try:
 				self.attributes[(row - 1, col + 1)]['wall'] = True
@@ -97,7 +99,7 @@ class GridGraph:
 				for neighbor in self.grid[(row + 1, col + 2)]:
 					self.weights[((row + 1, col + 2), neighbor)] = float('inf')
 					self.weights[(neighbor, (row + 1, col + 2))] = float('inf')
-				return ((row, col + 2),'S')
+				return ((row, col + 2),'S', obstacleID)
 			except KeyError:
 				if row - 1 < 0:
 					self.attributes[(row + 1, col + 1)]['wall'] = True
@@ -108,7 +110,7 @@ class GridGraph:
 					for neighbor in self.grid[(row + 1, col + 2)]:
 						self.weights[((row + 1, col + 2), neighbor)] = float('inf')
 						self.weights[(neighbor, (row + 1, col + 2))] = float('inf')
-					return ((row, col + 2), 'S')
+					return ((row, col + 2), 'S', obstacleID)
 				elif row + 1 >= 20 :
 					self.attributes[(row - 1, col + 1)]['wall'] = True
 					self.attributes[(row - 1, col + 2)]['wall'] = True
@@ -118,7 +120,7 @@ class GridGraph:
 					for neighbor in self.grid[(row - 1, col + 2)]:
 						self.weights[((row - 1, col + 2), neighbor)] = float('inf')
 						self.weights[(neighbor, (row - 1, col + 2))] = float('inf')
-					return ((row, col + 2), 'S')
+					return ((row, col + 2), 'S', obstacleID)
 		elif side == 'S':
 			try:
 				self.attributes[(row - 1, col - 2)]['wall'] = True
@@ -137,7 +139,7 @@ class GridGraph:
 				for neighbor in self.grid[(row + 1, col - 3)]:
 					self.weights[((row + 1, col - 3), neighbor)] = float('inf')
 					self.weights[(neighbor, (row + 1, col - 3))] = float('inf')
-				return ((row, col - 3),'N')
+				return ((row, col - 3),'N',	obstacleID)
 			except KeyError:
 				if row - 1 < 0:
 					self.attributes[(row + 1, col - 2)]['wall'] = True
@@ -148,7 +150,7 @@ class GridGraph:
 					for neighbor in self.grid[(row + 1, col - 3)]:
 						self.weights[((row + 1, col - 3), neighbor)] = float('inf')
 						self.weights[(neighbor, (row + 1, col - 3))] = float('inf')
-					return ((row, col - 3), 'N')
+					return ((row, col - 3), 'N', obstacleID)
 				elif row + 1 >= 20:
 					self.attributes[(row - 1, col - 2)]['wall'] = True
 					self.attributes[(row - 1, col - 3)]['wall'] = True
@@ -158,7 +160,7 @@ class GridGraph:
 					for neighbor in self.grid[(row - 1, col - 3)]:
 						self.weights[((row - 1, col - 3), neighbor)] = float('inf')
 						self.weights[(neighbor, (row - 1, col - 3))] = float('inf')
-					return ((row, col - 3), 'N')
+					return ((row, col - 3), 'N', obstacleID)
 
 		elif side == 'E':
 			try:
@@ -178,7 +180,7 @@ class GridGraph:
 				for neighbor in self.grid[(row + 3, col - 1)]:
 					self.weights[((row + 3, col - 1), neighbor)] = float('inf')
 					self.weights[(neighbor, (row + 3, col - 1))] = float('inf')
-				return ((row + 3, col), 'W')
+				return ((row + 3, col), 'W', obstacleID)
 			except KeyError:
 				if col + 1 >= 21:
 					self.attributes[(row + 2, col - 1)]['wall'] = True
@@ -189,7 +191,7 @@ class GridGraph:
 					for neighbor in self.grid[(row + 3, col - 1)]:
 						self.weights[((row + 3, col - 1), neighbor)] = float('inf')
 						self.weights[(neighbor, (row + 3, col - 1))] = float('inf')
-					return ((row + 3, col), 'W')
+					return ((row + 3, col), 'W', obstacleID)
 				elif col - 1 < 0:
 					self.attributes[(row + 2, col + 1)]['wall'] = True
 					self.attributes[(row + 3, col + 1)]['wall'] = True
@@ -199,7 +201,7 @@ class GridGraph:
 					for neighbor in self.grid[(row + 3, col + 1)]:
 						self.weights[((row + 3, col + 1), neighbor)] = float('inf')
 						self.weights[(neighbor, (row + 3, col + 1))] = float('inf')
-					return ((row + 3, col), 'W')
+					return ((row + 3, col), 'W', obstacleID)
 		elif side == 'W':
 			try:
 				self.attributes[(row - 1, col + 1)]['wall'] = True
@@ -218,7 +220,7 @@ class GridGraph:
 				for neighbor in self.grid[(row - 2, col - 1)]:
 					self.weights[((row - 2, col - 1), neighbor)] = float('inf')
 					self.weights[(neighbor, (row - 2, col - 1))] = float('inf')
-				return ((row - 2, col), 'E')
+				return ((row - 2, col), 'E', obstacleID)
 			except KeyError:
 				if col + 1 >= 21:
 					self.attributes[(row - 1, col - 1)]['wall'] = True
@@ -229,7 +231,7 @@ class GridGraph:
 					for neighbor in self.grid[(row - 2, col - 1)]:
 						self.weights[((row - 2, col - 1), neighbor)] = float('inf')
 						self.weights[(neighbor, (row - 2, col - 1))] = float('inf')
-					return ((row - 2, col), 'E')
+					return ((row - 2, col), 'E', obstacleID)
 				elif col - 1 < 0:
 					self.attributes[(row - 1, col + 1)]['wall'] = True
 					self.attributes[(row - 2, col + 1)]['wall'] = True
@@ -239,7 +241,7 @@ class GridGraph:
 					for neighbor in self.grid[(row - 2, col + 1)]:
 						self.weights[((row - 2, col + 1), neighbor)] = float('inf')
 						self.weights[(neighbor, (row - 2, col + 1))] = float('inf')
-					return ((row - 2, col), 'E')
+					return ((row - 2, col), 'E', obstacleID)
 
 	def get_goals(self, obstacle_vertices):
 		return [self.get_obstacle_side_node(obstacle_vertex) for obstacle_vertex in obstacle_vertices]
@@ -361,8 +363,8 @@ class GridGraph:
 		# while counter < len(goals):
 		while True:
 			path = self.get_shortest_path(start, goals)
-			print("GPAL " , goals)
-			print(path)
+			# print("GPAL " , goals)
+			# print(path)
 			if path is None:
 				break
 			final_path.extend(path)
@@ -371,6 +373,7 @@ class GridGraph:
 			#look through goals to check if its same as start and remove it
 			for i in range(len(goals)):
 				if goals[i][0] == start:
+					self.order.append(goals[i][2])
 					goals.remove(goals[i])
 					break
 		return final_path
@@ -402,9 +405,10 @@ class GridGraph:
 					goalfound = True
 					break
 			if goalfound:
-				commands.append([direction, round(distance, 2), "goal next"])
+				commands.append([direction, round(distance, 2), "Reached obstacle: ",self.order[0]])
+				del self.order[0]
 			else:
-				commands.append([direction, round(distance, 2), "goal not next"])
+				commands.append([direction, round(distance, 2), "Going to obstacle: ", self.order[0]])
 		return commands
 
 	def movement_instructions(self, commands, current_direction):
@@ -413,17 +417,18 @@ class GridGraph:
 		for command in commands:
 			if command[0] == current_direction:
 				counter += 1
-				if command[2] == "goal next":
+				if command[2] == "Reached obstacle: ":
 					instruction_list.append(['W', counter])
-					instruction_list.append(['goal next'])
+					instruction_list.append(["Reached obstacle: ", command[3]])
 					current_direction = command[0]
 					counter = 0
 
 			else:
-				instruction_list.append(['W', counter])
-				instruction_list.append([self.check_next_direction(current_direction, command[0]), 1])
-				if command[2] == "goal next":
-					instruction_list.append(['goal next'])
+				if counter != 0:
+					instruction_list.append(['W', counter, "Going to obstacle: ",command[3]])
+				instruction_list.append([self.check_next_direction(current_direction, command[0]), 1,"Going to obstacle: ",command[3]])
+				if command[2] == "Reached obstacle: ":
+					instruction_list.append(["Reached obstacle: ", command[3]])
 				current_direction = command[0]
 				counter = 0
 		return instruction_list
@@ -455,17 +460,16 @@ grid_graph = GridGraph(20, 20)
 grid_graph.add_attribute((3, 8), 'obstacle', 'S', 1)
 grid_graph.add_attribute((3, 12), 'obstacle', 'N', 2)
 
-grid_graph.add_attribute((3, 16), 'obstacle', 'S', 4)
-grid_graph.add_attribute((14, 7), 'obstacle', 'N', 5)
-grid_graph.add_attribute((6, 17), 'obstacle', 'W', 6)
+grid_graph.add_attribute((3, 16), 'obstacle', 'S', 3)
+grid_graph.add_attribute((14, 7), 'obstacle', 'N', 4)
+grid_graph.add_attribute((6, 17), 'obstacle', 'W', 5)
 
-print(grid_graph.get_obstacle_vertices())
-print(grid_graph.get_goals(grid_graph.get_obstacle_vertices()))
+# print(grid_graph.get_obstacle_vertices())
+# print(grid_graph.get_goals(grid_graph.get_obstacle_vertices()))
 # print(grid_graph.get_shortest_path((0, 0), grid_graph.get_obstacle_side_nodes(grid_graph.get_obstacle_vertices())))
-grid_graph.plot(
-	path=grid_graph.a_star_search_multiple_obstacles((1, 2), grid_graph.get_goals(grid_graph.get_obstacle_vertices())))
-print(grid_graph.a_star_search_multiple_obstacles((1, 2), grid_graph.get_goals(
-	grid_graph.get_obstacle_vertices())))
+grid_graph.plot(	path=grid_graph.a_star_search_multiple_obstacles((1, 2), grid_graph.get_goals(grid_graph.get_obstacle_vertices())))
+# print(grid_graph.a_star_search_multiple_obstacles((1, 2), grid_graph.get_goals(
+# 	grid_graph.get_obstacle_vertices())))
 
 # print(grid_graph.get_edge_weights((13,8)))
 # print(grid_graph.get_edge_weights((14,6)))
@@ -474,19 +478,20 @@ print(grid_graph.a_star_search_multiple_obstacles((1, 2), grid_graph.get_goals(
 
 path = grid_graph.a_star_search_multiple_obstacles((1, 2), grid_graph.get_goals(grid_graph.get_obstacle_vertices()))
 # threshold_angle = 45
+print(grid_graph.order)
 # previous_direction = (1, 1)  # arbitrary initial value
 # for i in range(1, len(path)):
 # 	current_direction = (path[i][0] - path[i - 1][0], path[i][1] - path[i - 1][1])
 # 	turn_type = grid_graph.calculate_turn_type(previous_direction, current_direction, threshold_angle)
 # 	print(f"From {path[i - 1]} to {path[i]}: {turn_type}")
 # 	previous_direction = current_direction
-print(grid_graph.summarize_path(path, grid_graph.get_goals(grid_graph.get_obstacle_vertices())))
+# print(grid_graph.summarize_path(path, grid_graph.get_goals(grid_graph.get_obstacle_vertices())))
 route = grid_graph.movement_instructions(grid_graph.summarize_path(path,grid_graph.get_goals(grid_graph.get_obstacle_vertices())), "North")
-print(grid_graph.movement_instructions(grid_graph.summarize_path(path, grid_graph.get_goals(grid_graph.get_obstacle_vertices())), "North"))
+# print(grid_graph.movement_instructions(grid_graph.summarize_path(path, grid_graph.get_goals(grid_graph.get_obstacle_vertices())), "North"))
 #remove all instance of W, 0 in route
 route = [x for x in route if x != ['W', 0]]
 print(route)
-print(grid_graph.get_edge_weights((13,2)))
+# print(grid_graph.get_edge_weights((13,2)))
 # data = '{"obstacle":[1,[5,12],"N"]}#{"obstacle":[2,[3,17],"S"]}'
 # grid = GridGraph(21, 21)
 # obstacleList = data.split("#")
