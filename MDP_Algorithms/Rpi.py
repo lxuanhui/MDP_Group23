@@ -70,25 +70,32 @@ while 1:
     (clientsocket, address) = serversocket.accept()
     print(address)
     print("connection found!")
-    data = clientsocket.recv(1024).decode()
+    no = clientsocket.recv(1024)
+    data = no.decode()
+
     print("rec",data)
     print(type(data))
+    print(no)
     grid = GridGraph(21, 21)
     obstacleList = data.split("^")
     print("OBS List " ,type(obstacleList))
+    newList = []
     for obstacle in obstacleList:
-        obstacle = eval(obstacle)
+        newList.append(eval(obstacle))
         print("obstacle",type(obstacle))
-    for obj in obstacleList:
+    for obj in newList:
+        print("in for loop ", obj)
+        print(type(obj),obj['obstacle'][1][0],obj['obstacle'][1][1])
         grid.add_attribute((obj['obstacle'][1][0],obj['obstacle'][1][1]), "obstacle", obj['obstacle'][2], obj['obstacle'][0])
     path = grid.a_star_search_multiple_obstacles((0, 2), grid.get_goals(grid.get_obstacle_vertices()))
     route = grid.movement_instructions(grid.summarize_path(path, grid.get_goals(grid.get_obstacle_vertices())), "North")
-    route = [x for x in route if x != ['W', 0]]
+    # route = [x for x in route if x != ['W', 0]]
     delim = "#"
     result = ''
     for i in route :
         result = result +str(i)+delim
-
+    print(result)
     clientsocket.send(result.encode())
+    print("SENT")
 
 
