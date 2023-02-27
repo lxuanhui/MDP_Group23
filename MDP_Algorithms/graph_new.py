@@ -22,6 +22,9 @@ class GridGraph:
 			'E': (1, 0)
 		}
 		self.order = []
+		self.x = 1
+		self.y = 2
+		self.facing ="North" #update this is the movement
 
 		# Create vertices for each cell in the grid
 		for row in range(self.rows):
@@ -411,26 +414,102 @@ class GridGraph:
 				commands.append([direction, round(distance, 2), "Going to obstacle: ", self.order[0]])
 		return commands
 
+	def updatePosNfacing(self,movedist,direction,currentdir):
+		if movedist ==0:
+			movedist =1
+		if currentdir == "North":
+			if direction == "North":
+				self.y += movedist #y increase
+			elif direction == "South":
+				self.y -= 1
+				self.facing = "South"
+			elif direction == "East":
+				self.x += movedist
+				self.facing = "East"
+			elif direction == "West":
+				self.x -= movedist
+				self.facing = "West"
+		elif currentdir == "South":
+			if direction == "North":
+				self.y += 1
+				self.facing = "North"
+			elif direction == "South":
+				self.y -= movedist
+			elif direction == "East":
+				self.x += movedist
+				self.facing = "East"
+			elif direction == "West":
+				self.x -= movedist
+				self.facing = "West"
+		elif currentdir == "East":
+			if direction == "North":
+				self.y += movedist
+				self.facing = "North"
+			elif direction == "South":
+				self.y -= movedist
+				self.facing = "South"
+			elif direction == "East":
+				self.x += movedist
+			elif direction == "West":
+				self.x -= 1
+				self.facing = "West"
+		elif currentdir == "West":
+			if direction == "North":
+				self.y += movedist
+				self.facing = "North"
+			elif direction == "South":
+				self.y -= movedist
+				self.facing = "South"
+			elif direction == "East":
+				self.x += 1
+				self.facing = "East"
+			elif direction == "West":
+				self.x -= movedist
+		else:
+			print("Error in updatePosNfacing")
+			print("currentdir: ", currentdir)
+			print("direction: ", direction)
+			print("movedist: ", movedist)
+
 	def movement_instructions(self, commands, current_direction):
 		counter = 0
 		instruction_list = []
 		for command in commands:
-			if command[0] == current_direction:
+			if command[0] == current_direction: #returns North South East West
 				counter += 1
 				if command[2] == "Reached obstacle: ":
-					instruction_list.append(['W', counter])
-					instruction_list.append(["Reached obstacle: ", command[3]])
+					facing = self.facing
+					self.updatePosNfacing(counter, facing,current_direction)
+					loc = [self.x,self.y]
+					facing = self.facing
+					#TODO update xh that i commented our reach obstacle to standardize the number of elements per list
+					instruction_list.append(['W', counter,"Reached obstacle: ", command[3],loc,facing])
+					#direction , distance, going to / reached obstacle , obstacle name, current location, current facing
+					# instruction_list.append(["Reached obstacle: ", command[3]])
+
+
 					current_direction = command[0]
 					counter = 0
 
 			else:
+
 				if counter != 0:
-					instruction_list.append(['W', counter, "Going to obstacle: ",command[3]])
-				instruction_list.append([self.check_next_direction(current_direction, command[0]), 1,"Going to obstacle: ",command[3]])
+					facing = self.facing
+					self.updatePosNfacing(counter, facing,
+										  current_direction)  # force to increase the direction it was facing
+					loc = [self.x, self.y]
+					facing = self.facing
+					instruction_list.append(['W', counter, "Going to obstacle: ",command[3],loc,facing])
+				self.updatePosNfacing(1, command[0], current_direction) #update base on the turn direction dist pass in is 1 because turning takes up 1 only
+				loc = [self.x, self.y]
+				facing = self.facing
+				instruction_list.append([self.check_next_direction(current_direction, command[0]), 1,"Going to obstacle: ",command[3],loc,facing])
 				if command[2] == "Reached obstacle: ":
-					instruction_list.append(["Reached obstacle: ", command[3]])
+					#TODO concerned that cause this append is only 2 index might not fit in with the others
+					instruction_list.append(["Reached obstacle: ", command[3],loc,facing])
 				current_direction = command[0]
 				counter = 0
+
 		return instruction_list
 
 
@@ -478,19 +557,20 @@ grid_graph.plot(	path=grid_graph.a_star_search_multiple_obstacles((1, 2), grid_g
 
 path = grid_graph.a_star_search_multiple_obstacles((1, 2), grid_graph.get_goals(grid_graph.get_obstacle_vertices()))
 # threshold_angle = 45
-print(grid_graph.order)
+# print(grid_graph.order)
 # previous_direction = (1, 1)  # arbitrary initial value
 # for i in range(1, len(path)):
 # 	current_direction = (path[i][0] - path[i - 1][0], path[i][1] - path[i - 1][1])
 # 	turn_type = grid_graph.calculate_turn_type(previous_direction, current_direction, threshold_angle)
 # 	print(f"From {path[i - 1]} to {path[i]}: {turn_type}")
 # 	previous_direction = current_direction
-# print(grid_graph.summarize_path(path, grid_graph.get_goals(grid_graph.get_obstacle_vertices())))
+# print("sum = ",grid_graph.summarize_path(path, grid_graph.get_goals(grid_graph.get_obstacle_vertices())))
 route = grid_graph.movement_instructions(grid_graph.summarize_path(path,grid_graph.get_goals(grid_graph.get_obstacle_vertices())), "North")
 # print(grid_graph.movement_instructions(grid_graph.summarize_path(path, grid_graph.get_goals(grid_graph.get_obstacle_vertices())), "North"))
 #remove all instance of W, 0 in route
-route = [x for x in route if x != ['W', 0]]
 print(route)
+route = [x for x in route if x != ['W', 0]]
+# print(route)
 # print(grid_graph.get_edge_weights((13,2)))
 # data = '{"obstacle":[1,[5,12],"N"]}#{"obstacle":[2,[3,17],"S"]}'
 # grid = GridGraph(21, 21)
