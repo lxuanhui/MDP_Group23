@@ -70,32 +70,60 @@ while 1:
     (clientsocket, address) = serversocket.accept()
     print(address)
     print("connection found!")
-    no = clientsocket.recv(1024)
-    data = no.decode()
+    # no = clientsocket.recv(1024)
+    # data = no.decode()
+    #
+    # print("rec",data)
+    # print(type(data))
+    # print(no)
+    # grid = GridGraph(21, 21)
+    # obstacleList = data.split("^")
+    # print("OBS List " ,type(obstacleList))
+    # newList = []
+    # for obstacle in obstacleList:
+    #     newList.append(eval(obstacle))
+    #     print("obstacle",type(obstacle))
+    # for obj in newList:
+    #     print("in for loop ", obj)
+    #     print(type(obj),obj['obstacle'][1][0],obj['obstacle'][1][1])
+    #     grid.add_attribute((obj['obstacle'][1][0],obj['obstacle'][1][1]), "obstacle", obj['obstacle'][2], obj['obstacle'][0])
+    # path = grid.a_star_search_multiple_obstacles((0, 2), grid.get_goals(grid.get_obstacle_vertices()))
+    # route = grid.movement_instructions(grid.summarize_path(path, grid.get_goals(grid.get_obstacle_vertices())), "North")
+    # # route = [x for x in route if x != ['W', 0]]
+    # delim = "#"
+    # result = ''
+    # for i in route :
+    #     result = result +str(i)+delim
+    # print(result)
 
-    print("rec",data)
-    print(type(data))
-    print(no)
-    grid = GridGraph(21, 21)
-    obstacleList = data.split("^")
-    print("OBS List " ,type(obstacleList))
-    newList = []
-    for obstacle in obstacleList:
-        newList.append(eval(obstacle))
-        print("obstacle",type(obstacle))
-    for obj in newList:
-        print("in for loop ", obj)
-        print(type(obj),obj['obstacle'][1][0],obj['obstacle'][1][1])
-        grid.add_attribute((obj['obstacle'][1][0],obj['obstacle'][1][1]), "obstacle", obj['obstacle'][2], obj['obstacle'][0])
-    path = grid.a_star_search_multiple_obstacles((0, 2), grid.get_goals(grid.get_obstacle_vertices()))
-    route = grid.movement_instructions(grid.summarize_path(path, grid.get_goals(grid.get_obstacle_vertices())), "North")
-    # route = [x for x in route if x != ['W', 0]]
-    delim = "#"
-    result = ''
-    for i in route :
-        result = result +str(i)+delim
-    print(result)
-    clientsocket.send(result.encode())
+
+
+
+
+    # result = "[{'movement': 'w020)', 'obstacle: ': 1, 'reached': 0, 'robotPosition': [1, 4, 'North']}, {'movement': 'd010)', 'obstacle: ': 1, 'reached': 0, 'robotPosition': [2, 4, 'East']}"
+
+    # result = list({"movement": "w020)", "obstacle": 1, "reached": 0, "robotPosition": [1, 4, "North"]}, {"movement": "d010)", "obstacle": 1, "reached": 0, "robotPosition": [2, 4, "East"]})
+    grid_graph = GridGraph(20, 20)
+    grid_graph.add_attribute((3, 8), 'obstacle', 'S', 1)
+    grid_graph.add_attribute((3, 12), 'obstacle', 'N', 2)
+
+    grid_graph.add_attribute((3, 16), 'obstacle', 'S', 3)
+    grid_graph.add_attribute((14, 7), 'obstacle', 'N', 4)
+    grid_graph.add_attribute((6, 17), 'obstacle', 'W', 5)
+
+    grid_graph.add_attribute((16, 3), 'obstacle', 'W', 6)
+    grid_graph.add_attribute((14, 18), 'obstacle', 'S', 7)
+    grid_graph.add_attribute((18, 10), 'obstacle', 'W', 8)
+
+    grid_graph.plot(path=grid_graph.a_star_search_multiple_obstacles((1, 2), grid_graph.get_goals(
+        grid_graph.get_obstacle_vertices())))
+
+    path = grid_graph.a_star_search_multiple_obstacles((1, 2), grid_graph.get_goals(grid_graph.get_obstacle_vertices()))
+    route = grid_graph.movement_instructions(
+        grid_graph.summarize_path(path, grid_graph.get_goals(grid_graph.get_obstacle_vertices())), "North")
+    print(route)
+    x = json.dumps(route)
+    clientsocket.send(x.encode())
     print("SENT")
 
 

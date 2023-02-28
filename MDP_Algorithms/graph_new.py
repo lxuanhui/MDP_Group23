@@ -487,7 +487,7 @@ class GridGraph:
 						counter = "0"+str(counter)+")"
 					else:
 						counter = str(counter)+"0)"
-					dictmove = {'movement': 'w'+counter, "obstacle: ": command[3],"reached":1, "robotPosition": loc, "direction": facing}
+					dictmove = {"m": 'w'+counter, "o": command[3],"r":1, "rp": loc, "direction": facing}
 					instruction_list.append(dictmove)
 					# instruction_list.append(['W', counter,"Reached obstacle: ", command[3],loc,facing]) #not needed cause using dict
 					#direction , distance, going to / reached obstacle , obstacle name, current location, current facing
@@ -508,7 +508,7 @@ class GridGraph:
 						counter = "0"+str(counter)+"0)"
 					else:
 						counter = str(counter)+"0)"
-					dictmove = {'movement': 'w' + counter, "obstacle: ": command[3], "reached": 0, "robotPosition": loc}
+					dictmove = {"m": 'w' + counter, "o": command[3], "r": 0, "rp": loc}
 					instruction_list.append(dictmove)
 					# instruction_list.append(['W', counter, "Going to obstacle: ",command[3],loc,facing])
 
@@ -516,13 +516,13 @@ class GridGraph:
 				facing = self.facing
 				loc = [self.x, self.y,facing]
 
-				dictmove = {'movement': self.check_next_direction(current_direction, command[0]) + "010)", "obstacle: ": command[3], "reached": 0, "robotPosition": loc}
+				dictmove = {"m": self.check_next_direction(current_direction, command[0]) + "010)", "o": command[3], "r": 0, "rp": loc}
 				instruction_list.append(dictmove)
 				current_direction = command[0]
 				# instruction_list.append([self.check_next_direction(current_direction, command[0]), '010)',"Going to obstacle: ",command[3],loc,facing])
 				if command[2] == "Reached obstacle: ":
 					# instruction_list.append(["Reached obstacle: ", command[3],loc,facing])
-					dictmove = {'movement': "", "obstacle: ": command[3], "reached": 1, "robotPosition": loc}
+					dictmove = {"m": "", "o": command[3], "r": 1, "rp": loc}
 					instruction_list.append(dictmove)
 				counter = 0
 
@@ -551,37 +551,37 @@ class GridGraph:
 
 # '[[1,(4,3),"N']- ]
 #
-grid_graph = GridGraph(20, 20)
-grid_graph.add_attribute((3, 8), 'obstacle', 'S', 1)
-grid_graph.add_attribute((3, 12), 'obstacle', 'N', 2)
-
-grid_graph.add_attribute((3, 16), 'obstacle', 'S', 3)
-grid_graph.add_attribute((14, 7), 'obstacle', 'N', 4)
-grid_graph.add_attribute((6, 17), 'obstacle', 'W', 5)
-
-# print(grid_graph.get_obstacle_vertices())
-# print(grid_graph.get_goals(grid_graph.get_obstacle_vertices()))
-# print(grid_graph.get_shortest_path((0, 0), grid_graph.get_obstacle_side_nodes(grid_graph.get_obstacle_vertices())))
-grid_graph.plot(	path=grid_graph.a_star_search_multiple_obstacles((1, 2), grid_graph.get_goals(grid_graph.get_obstacle_vertices())))
-# print(grid_graph.a_star_search_multiple_obstacles((1, 2), grid_graph.get_goals(
-# 	grid_graph.get_obstacle_vertices())))
-
-# print(grid_graph.get_edge_weights((13,8)))
-# print(grid_graph.get_edge_weights((14,6)))
-# print(grid_graph.get_edge_weights((15,6)))
-# print(grid_graph.get_edge_weights((15,7)))
-
-path = grid_graph.a_star_search_multiple_obstacles((1, 2), grid_graph.get_goals(grid_graph.get_obstacle_vertices()))
-# threshold_angle = 45
-# print(grid_graph.order)
-# previous_direction = (1, 1)  # arbitrary initial value
-# for i in range(1, len(path)):
-# 	current_direction = (path[i][0] - path[i - 1][0], path[i][1] - path[i - 1][1])
-# 	turn_type = grid_graph.calculate_turn_type(previous_direction, current_direction, threshold_angle)
-# 	print(f"From {path[i - 1]} to {path[i]}: {turn_type}")
-# 	previous_direction = current_direction
-# print("sum = ",grid_graph.summarize_path(path, grid_graph.get_goals(grid_graph.get_obstacle_vertices())))
-route = grid_graph.movement_instructions(grid_graph.summarize_path(path,grid_graph.get_goals(grid_graph.get_obstacle_vertices())), "North")
+# grid_graph = GridGraph(20, 20)
+# grid_graph.add_attribute((3, 8), 'obstacle', 'S', 1)
+# grid_graph.add_attribute((3, 12), 'obstacle', 'N', 2)
+#
+# grid_graph.add_attribute((3, 16), 'obstacle', 'S', 3)
+# grid_graph.add_attribute((14, 7), 'obstacle', 'N', 4)
+# grid_graph.add_attribute((6, 17), 'obstacle', 'W', 5)
+#
+# # print(grid_graph.get_obstacle_vertices())
+# # print(grid_graph.get_goals(grid_graph.get_obstacle_vertices()))
+# # print(grid_graph.get_shortest_path((0, 0), grid_graph.get_obstacle_side_nodes(grid_graph.get_obstacle_vertices())))
+# grid_graph.plot(	path=grid_graph.a_star_search_multiple_obstacles((1, 2), grid_graph.get_goals(grid_graph.get_obstacle_vertices())))
+# # print(grid_graph.a_star_search_multiple_obstacles((1, 2), grid_graph.get_goals(
+# # 	grid_graph.get_obstacle_vertices())))
+#
+# # print(grid_graph.get_edge_weights((13,8)))
+# # print(grid_graph.get_edge_weights((14,6)))
+# # print(grid_graph.get_edge_weights((15,6)))
+# # print(grid_graph.get_edge_weights((15,7)))
+#
+# path = grid_graph.a_star_search_multiple_obstacles((1, 2), grid_graph.get_goals(grid_graph.get_obstacle_vertices()))
+# # threshold_angle = 45
+# # print(grid_graph.order)
+# # previous_direction = (1, 1)  # arbitrary initial value
+# # for i in range(1, len(path)):
+# # 	current_direction = (path[i][0] - path[i - 1][0], path[i][1] - path[i - 1][1])
+# # 	turn_type = grid_graph.calculate_turn_type(previous_direction, current_direction, threshold_angle)
+# # 	print(f"From {path[i - 1]} to {path[i]}: {turn_type}")
+# # 	previous_direction = current_direction
+# # print("sum = ",grid_graph.summarize_path(path, grid_graph.get_goals(grid_graph.get_obstacle_vertices())))
+# route = grid_graph.movement_instructions(grid_graph.summarize_path(path,grid_graph.get_goals(grid_graph.get_obstacle_vertices())), "North")
 # print(grid_graph.movement_instructions(grid_graph.summarize_path(path, grid_graph.get_goals(grid_graph.get_obstacle_vertices())), "North"))
 #remove all instance of W, 0 in route
 # print(route)
@@ -590,7 +590,7 @@ route = grid_graph.movement_instructions(grid_graph.summarize_path(path,grid_gra
 # result = ''
 # for i in route :
 # 	result = result +str(i)+delim
-print(route)
+# print(route)
 # print(route)
 # print(grid_graph.get_edge_weights((13,2)))
 # data = '{"obstacle":[1,[5,12],"N"]}#{"obstacle":[2,[3,17],"S"]}'
@@ -608,4 +608,29 @@ print(route)
 # route = grid.movement_instructions(grid.summarize_path(path, grid.get_goals(grid.get_obstacle_vertices())), "North")
 # route = [x for x in route if x != ['W', 0]]
 
+# # print(route)
+#
+#
+# grid_graph = GridGraph(20, 20)
+# grid_graph.add_attribute((3, 8), 'obstacle', 'S', 1)
+# grid_graph.add_attribute((3, 12), 'obstacle', 'N', 2)
+#
+# grid_graph.add_attribute((3, 16), 'obstacle', 'S', 3)
+# grid_graph.add_attribute((14, 7), 'obstacle', 'N', 4)
+# grid_graph.add_attribute((6, 17), 'obstacle', 'W', 5)
+#
+# grid_graph.add_attribute((16, 3), 'obstacle', 'W', 6)
+# grid_graph.add_attribute((14, 18), 'obstacle', 'S', 7)
+# grid_graph.add_attribute((18, 10), 'obstacle', 'W', 8)
+#
+# grid_graph.plot(path=grid_graph.a_star_search_multiple_obstacles((1, 2), grid_graph.get_goals(
+# 	grid_graph.get_obstacle_vertices())))
+#
+# path = grid_graph.a_star_search_multiple_obstacles((1, 2), grid_graph.get_goals(grid_graph.get_obstacle_vertices()))
+# route = grid_graph.movement_instructions(
+# 	grid_graph.summarize_path(path, grid_graph.get_goals(grid_graph.get_obstacle_vertices())), "North")
 # print(route)
+# sending =[]
+# for x in range(10):
+# 	sending.append(route[x]["m"])
+# print(sending)
