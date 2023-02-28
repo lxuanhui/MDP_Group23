@@ -1,4 +1,7 @@
 import math
+import os
+import subprocess
+
 import matplotlib.pyplot as plt
 import heapq
 import json
@@ -24,7 +27,7 @@ class GridGraph:
 		self.order = []
 		self.x = 1
 		self.y = 2
-		self.facing ="North" #update this is the movement
+		self.facing ="n" #update this is the movement
 
 		# Create vertices for each cell in the grid
 		for row in range(self.rows):
@@ -392,13 +395,13 @@ class GridGraph:
 			dy = y2 - y1
 			distance = math.sqrt(dx ** 2 + dy ** 2)
 			if dy > 0 and abs(dy) >= abs(dx):
-				direction = "North"
+				direction = "n"
 			elif dy < 0 and abs(dy) >= abs(dx):
-				direction = "South"
+				direction = "s"
 			elif dx > 0 and abs(dx) >= abs(dy):
-				direction = "East"
+				direction = "e"
 			elif dx < 0 and abs(dx) >= abs(dy):
-				direction = "West"
+				direction = "w"
 			else:
 				continue
 			goalfound = False
@@ -417,77 +420,77 @@ class GridGraph:
 	def updatePosNfacing(self,movedist,direction,currentdir):
 		if movedist ==0:
 			movedist =1
-		if currentdir == "North":
-			if direction == "North":
+		if currentdir == "n":
+			if direction == "n":
 				self.y += movedist #y increase
-			elif direction == "South":
+			elif direction == "s":
 				self.y -= 1
-				self.facing = "South"
-			elif direction == "East":
+				self.facing = "s"
+			elif direction == "e":
 				self.x += movedist
-				self.facing = "East"
-			elif direction == "West":
+				self.facing = "e"
+			elif direction == "w":
 				self.x -= movedist
-				self.facing = "West"
-		elif currentdir == "South":
-			if direction == "North":
+				self.facing = "w"
+		elif currentdir == "s":
+			if direction == "n":
 				self.y += 1
-				self.facing = "North"
-			elif direction == "South":
+				self.facing = "n"
+			elif direction == "s":
 				self.y -= movedist
-			elif direction == "East":
+			elif direction == "e":
 				self.x += movedist
-				self.facing = "East"
-			elif direction == "West":
+				self.facing = "e"
+			elif direction == "w":
 				self.x -= movedist
-				self.facing = "West"
-		elif currentdir == "East":
-			if direction == "North":
+				self.facing = "w"
+		elif currentdir == "e":
+			if direction == "n":
 				self.y += movedist
-				self.facing = "North"
-			elif direction == "South":
+				self.facing = "n"
+			elif direction == "s":
 				self.y -= movedist
-				self.facing = "South"
-			elif direction == "East":
+				self.facing = "s"
+			elif direction == "e":
 				self.x += movedist
-			elif direction == "West":
+			elif direction == "w":
 				self.x -= 1
-				self.facing = "West"
-		elif currentdir == "West":
-			if direction == "North":
+				self.facing = "w"
+		elif currentdir == "w":
+			if direction == "n":
 				self.y += movedist
-				self.facing = "North"
-			elif direction == "South":
+				self.facing = "n"
+			elif direction == "s":
 				self.y -= movedist
-				self.facing = "South"
-			elif direction == "East":
+				self.facing = "s"
+			elif direction == "e":
 				self.x += 1
-				self.facing = "East"
-			elif direction == "West":
+				self.facing = "e"
+			elif direction == "w":
 				self.x -= movedist
 		else:
 			print("Error in updatePosNfacing")
-			print("currentdir: ", currentdir)
-			print("direction: ", direction)
-			print("movedist: ", movedist)
+			print( currentdir, direction)
+			# print("currentdir: ", currentdir)
+			# print("direction: ", direction)
+			# print("movedist: ", movedist)
 
 	def movement_instructions(self, commands, current_direction):
 		counter = 0
 		instruction_list = []
 		for command in commands:
-			if command[0] == current_direction: #returns North South East West
+			if command[0] == current_direction: #returns n s e w
 				counter += 1
 				if command[2] == "Reached obstacle: ":
 					facing = self.facing
 					self.updatePosNfacing(counter, facing,current_direction)
 					facing = self.facing
-					loc = [self.x, self.y, facing]
-					#TODO update xh that i commented our reach obstacle to standardize the number of elements per list
+					loc = "[" + str(self.x) +","+ str(self.y) +","+ str(facing) + "]"
 					if counter <10:
 						counter = "0"+str(counter)+")"
 					else:
 						counter = str(counter)+"0)"
-					dictmove = {"m": 'w'+counter, "o": command[3],"r":1, "rp": loc, "direction": facing}
+					dictmove = {"m": 'w'+counter, "o": command[3],"r":1, "rp": loc}
 					instruction_list.append(dictmove)
 					# instruction_list.append(['W', counter,"Reached obstacle: ", command[3],loc,facing]) #not needed cause using dict
 					#direction , distance, going to / reached obstacle , obstacle name, current location, current facing
@@ -503,7 +506,7 @@ class GridGraph:
 					facing = self.facing
 					self.updatePosNfacing(counter, facing,current_direction)  # force to increase the direction it was facing
 					facing = self.facing
-					loc = [self.x, self.y, facing]
+					loc = "[" + str(self.x) +","+ str(self.y) +","+ str(facing) + "]"
 					if counter <10:
 						counter = "0"+str(counter)+"0)"
 					else:
@@ -514,7 +517,7 @@ class GridGraph:
 
 				self.updatePosNfacing(1, command[0], current_direction) #update base on the turn direction dist pass in is 1 because turning takes up 1 only
 				facing = self.facing
-				loc = [self.x, self.y,facing]
+				loc = "[" + str(self.x) +","+ str(self.y) +","+ str(facing) + "]"
 
 				dictmove = {"m": self.check_next_direction(current_direction, command[0]) + "010)", "o": command[3], "r": 0, "rp": loc}
 				instruction_list.append(dictmove)
@@ -530,21 +533,21 @@ class GridGraph:
 
 
 	def check_next_direction(self, current_direction, next_direction):
-		if current_direction == "North" and next_direction == "East":
+		if current_direction == "n" and next_direction == "e":
 			return "d"
-		elif current_direction == "North" and next_direction == "West":
+		elif current_direction == "n" and next_direction == "w":
 			return "a"
-		elif current_direction == "South" and next_direction == "East":
+		elif current_direction == "s" and next_direction == "e":
 			return "a"
-		elif current_direction == "South" and next_direction == "West":
+		elif current_direction == "s" and next_direction == "w":
 			return "d"
-		elif current_direction == "East" and next_direction == "North":
+		elif current_direction == "e" and next_direction == "n":
 			return "a"
-		elif current_direction == "East" and next_direction == "South":
+		elif current_direction == "e" and next_direction == "s":
 			return "d"
-		elif current_direction == "West" and next_direction == "North":
+		elif current_direction == "w" and next_direction == "n":
 			return "d"
-		elif current_direction == "West" and next_direction == "South":
+		elif current_direction == "w" and next_direction == "s":
 			return "a"
 		else:
 			return "b"
@@ -553,7 +556,7 @@ class GridGraph:
 #
 # grid_graph = GridGraph(20, 20)
 # grid_graph.add_attribute((3, 8), 'obstacle', 'S', 1)
-# grid_graph.add_attribute((3, 12), 'obstacle', 'N', 2)
+# grid_graph.add_attribute((2, 12), 'obstacle', 'N', 2)
 #
 # grid_graph.add_attribute((3, 16), 'obstacle', 'S', 3)
 # grid_graph.add_attribute((14, 7), 'obstacle', 'N', 4)
@@ -581,8 +584,8 @@ class GridGraph:
 # # 	print(f"From {path[i - 1]} to {path[i]}: {turn_type}")
 # # 	previous_direction = current_direction
 # # print("sum = ",grid_graph.summarize_path(path, grid_graph.get_goals(grid_graph.get_obstacle_vertices())))
-# route = grid_graph.movement_instructions(grid_graph.summarize_path(path,grid_graph.get_goals(grid_graph.get_obstacle_vertices())), "North")
-# print(grid_graph.movement_instructions(grid_graph.summarize_path(path, grid_graph.get_goals(grid_graph.get_obstacle_vertices())), "North"))
+# route = grid_graph.movement_instructions(grid_graph.summarize_path(path,grid_graph.get_goals(grid_graph.get_obstacle_vertices())), "n")
+# print(grid_graph.movement_instructions(grid_graph.summarize_path(path, grid_graph.get_goals(grid_graph.get_obstacle_vertices())), "n"))
 #remove all instance of W, 0 in route
 # print(route)
 # route = [x for x in route if x != ['W', 0]]
@@ -605,32 +608,53 @@ class GridGraph:
 # for obj in newObstacleList:
 # 	grid.add_attribute((obj['obstacle'][1][0],obj['obstacle'][1][1]), "obstacle", obj['obstacle'][2], obj['obstacle'][0])
 # path = grid.a_star_search_multiple_obstacles((0, 2), grid.get_goals(grid.get_obstacle_vertices()))
-# route = grid.movement_instructions(grid.summarize_path(path, grid.get_goals(grid.get_obstacle_vertices())), "North")
+# route = grid.movement_instructions(grid.summarize_path(path, grid.get_goals(grid.get_obstacle_vertices())), "n")
 # route = [x for x in route if x != ['W', 0]]
 
 # # print(route)
 #
 #
 # grid_graph = GridGraph(20, 20)
-# grid_graph.add_attribute((3, 8), 'obstacle', 'S', 1)
-# grid_graph.add_attribute((3, 12), 'obstacle', 'N', 2)
+# grid_graph.add_attribute((2, 12), 'obstacle', 'S', 1)
+# grid_graph.add_attribute((14, 7), 'obstacle', 'W', 2)
 #
-# grid_graph.add_attribute((3, 16), 'obstacle', 'S', 3)
-# grid_graph.add_attribute((14, 7), 'obstacle', 'N', 4)
-# grid_graph.add_attribute((6, 17), 'obstacle', 'W', 5)
-#
-# grid_graph.add_attribute((16, 3), 'obstacle', 'W', 6)
-# grid_graph.add_attribute((14, 18), 'obstacle', 'S', 7)
-# grid_graph.add_attribute((18, 10), 'obstacle', 'W', 8)
+# grid_graph.add_attribute((8, 3), 'obstacle', 'N', 3)
+# grid_graph.add_attribute((15, 16), 'obstacle', 'W', 4)
+# # grid_graph.add_attribute((6, 17), 'obstacle', 'W', 5)
+# #
+# # grid_graph.add_attribute((16, 3), 'obstacle', 'W', 6)
+# # grid_graph.add_attribute((14, 18), 'obstacle', 'S', 7)
+# # grid_graph.add_attribute((18, 10), 'obstacle', 'W', 8)
 #
 # grid_graph.plot(path=grid_graph.a_star_search_multiple_obstacles((1, 2), grid_graph.get_goals(
 # 	grid_graph.get_obstacle_vertices())))
 #
 # path = grid_graph.a_star_search_multiple_obstacles((1, 2), grid_graph.get_goals(grid_graph.get_obstacle_vertices()))
 # route = grid_graph.movement_instructions(
-# 	grid_graph.summarize_path(path, grid_graph.get_goals(grid_graph.get_obstacle_vertices())), "North")
+# 	grid_graph.summarize_path(path, grid_graph.get_goals(grid_graph.get_obstacle_vertices())), "n")
 # print(route)
 # sending =[]
 # for x in range(10):
 # 	sending.append(route[x]["m"])
 # print(sending)
+#
+#
+#
+#
+# with open('route.json', 'w') as outfile:
+# 	json.dump(route, outfile)
+#
+# with open('route.json','r') as f:
+# 	data = json.load(f)
+# 	print(data)
+# for i in data:
+# 	print(i["m"])
+# 	print(type(i["m"])) #string movement
+# 	print(type(i["o"])) #int obstacle ID
+# 	print(type(i["r"])) #int reached 0 or 1
+# 	print(type(i["rp"])) #list of x,y, reached position
+#
+# p = subprocess.Popen(["scp", "route.json", "mdp-group23@192.168.23.23:/home/mdp-group23/Desktop"])
+# sts= p.wait()
+# print("successfully send to rpi")
+
