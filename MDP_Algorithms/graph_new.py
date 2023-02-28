@@ -480,10 +480,16 @@ class GridGraph:
 				if command[2] == "Reached obstacle: ":
 					facing = self.facing
 					self.updatePosNfacing(counter, facing,current_direction)
-					loc = [self.x,self.y]
 					facing = self.facing
+					loc = [self.x, self.y, facing]
 					#TODO update xh that i commented our reach obstacle to standardize the number of elements per list
-					instruction_list.append(['W', counter,"Reached obstacle: ", command[3],loc,facing])
+					if counter <10:
+						counter = "0"+str(counter)+")"
+					else:
+						counter = str(counter)+"0)"
+					dictmove = {'movement': 'w'+counter, "obstacle: ": command[3],"reached":1, "position": loc, "direction": facing}
+					instruction_list.append(dictmove)
+					# instruction_list.append(['W', counter,"Reached obstacle: ", command[3],loc,facing]) #not needed cause using dict
 					#direction , distance, going to / reached obstacle , obstacle name, current location, current facing
 					# instruction_list.append(["Reached obstacle: ", command[3]])
 
@@ -495,19 +501,29 @@ class GridGraph:
 
 				if counter != 0:
 					facing = self.facing
-					self.updatePosNfacing(counter, facing,
-										  current_direction)  # force to increase the direction it was facing
-					loc = [self.x, self.y]
+					self.updatePosNfacing(counter, facing,current_direction)  # force to increase the direction it was facing
 					facing = self.facing
-					instruction_list.append(['W', counter, "Going to obstacle: ",command[3],loc,facing])
+					loc = [self.x, self.y, facing]
+					if counter <10:
+						counter = "0"+str(counter)+"0)"
+					else:
+						counter = str(counter)+"0)"
+					dictmove = {'movement': 'w' + counter, "obstacle: ": command[3], "reached": 0, "position": loc}
+					instruction_list.append(dictmove)
+					# instruction_list.append(['W', counter, "Going to obstacle: ",command[3],loc,facing])
+
 				self.updatePosNfacing(1, command[0], current_direction) #update base on the turn direction dist pass in is 1 because turning takes up 1 only
-				loc = [self.x, self.y]
 				facing = self.facing
-				instruction_list.append([self.check_next_direction(current_direction, command[0]), 1,"Going to obstacle: ",command[3],loc,facing])
-				if command[2] == "Reached obstacle: ":
-					#TODO concerned that cause this append is only 2 index might not fit in with the others
-					instruction_list.append(["Reached obstacle: ", command[3],loc,facing])
+				loc = [self.x, self.y,facing]
+
+				dictmove = {'movement': self.check_next_direction(current_direction, command[0]) + "010)", "obstacle: ": command[3], "reached": 0, "position": loc}
+				instruction_list.append(dictmove)
 				current_direction = command[0]
+				# instruction_list.append([self.check_next_direction(current_direction, command[0]), '010)',"Going to obstacle: ",command[3],loc,facing])
+				if command[2] == "Reached obstacle: ":
+					# instruction_list.append(["Reached obstacle: ", command[3],loc,facing])
+					dictmove = {'movement': "", "obstacle: ": command[3], "reached": 1, "position": loc}
+					instruction_list.append(dictmove)
 				counter = 0
 
 		return instruction_list
@@ -525,13 +541,13 @@ class GridGraph:
 		elif current_direction == "East" and next_direction == "North":
 			return "Left"
 		elif current_direction == "East" and next_direction == "South":
-			return "Right"
+			return "d"
 		elif current_direction == "West" and next_direction == "North":
-			return "Right"
+			return "d"
 		elif current_direction == "West" and next_direction == "South":
-			return "Left"
+			return "a"
 		else:
-			return "180 Turn"
+			return "b"
 
 # '[[1,(4,3),"N']- ]
 #
@@ -568,8 +584,13 @@ path = grid_graph.a_star_search_multiple_obstacles((1, 2), grid_graph.get_goals(
 route = grid_graph.movement_instructions(grid_graph.summarize_path(path,grid_graph.get_goals(grid_graph.get_obstacle_vertices())), "North")
 # print(grid_graph.movement_instructions(grid_graph.summarize_path(path, grid_graph.get_goals(grid_graph.get_obstacle_vertices())), "North"))
 #remove all instance of W, 0 in route
+# print(route)
+# route = [x for x in route if x != ['W', 0]]
+# delim = "#"
+# result = ''
+# for i in route :
+# 	result = result +str(i)+delim
 print(route)
-route = [x for x in route if x != ['W', 0]]
 # print(route)
 # print(grid_graph.get_edge_weights((13,2)))
 # data = '{"obstacle":[1,[5,12],"N"]}#{"obstacle":[2,[3,17],"S"]}'
