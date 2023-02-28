@@ -487,7 +487,7 @@ class GridGraph:
 						counter = "0"+str(counter)+")"
 					else:
 						counter = str(counter)+"0)"
-					dictmove = {'movement': 'w'+counter, "obstacle: ": command[3],"reached":1, "position": loc, "direction": facing}
+					dictmove = {'movement': 'w'+counter, "obstacle: ": command[3],"reached":1, "robotPosition": loc, "direction": facing}
 					instruction_list.append(dictmove)
 					# instruction_list.append(['W', counter,"Reached obstacle: ", command[3],loc,facing]) #not needed cause using dict
 					#direction , distance, going to / reached obstacle , obstacle name, current location, current facing
@@ -508,7 +508,7 @@ class GridGraph:
 						counter = "0"+str(counter)+"0)"
 					else:
 						counter = str(counter)+"0)"
-					dictmove = {'movement': 'w' + counter, "obstacle: ": command[3], "reached": 0, "position": loc}
+					dictmove = {'movement': 'w' + counter, "obstacle: ": command[3], "reached": 0, "robotPosition": loc}
 					instruction_list.append(dictmove)
 					# instruction_list.append(['W', counter, "Going to obstacle: ",command[3],loc,facing])
 
@@ -516,13 +516,13 @@ class GridGraph:
 				facing = self.facing
 				loc = [self.x, self.y,facing]
 
-				dictmove = {'movement': self.check_next_direction(current_direction, command[0]) + "010)", "obstacle: ": command[3], "reached": 0, "position": loc}
+				dictmove = {'movement': self.check_next_direction(current_direction, command[0]) + "010)", "obstacle: ": command[3], "reached": 0, "robotPosition": loc}
 				instruction_list.append(dictmove)
 				current_direction = command[0]
 				# instruction_list.append([self.check_next_direction(current_direction, command[0]), '010)',"Going to obstacle: ",command[3],loc,facing])
 				if command[2] == "Reached obstacle: ":
 					# instruction_list.append(["Reached obstacle: ", command[3],loc,facing])
-					dictmove = {'movement': "", "obstacle: ": command[3], "reached": 1, "position": loc}
+					dictmove = {'movement': "", "obstacle: ": command[3], "reached": 1, "robotPosition": loc}
 					instruction_list.append(dictmove)
 				counter = 0
 
@@ -531,15 +531,15 @@ class GridGraph:
 
 	def check_next_direction(self, current_direction, next_direction):
 		if current_direction == "North" and next_direction == "East":
-			return "Right"
+			return "d"
 		elif current_direction == "North" and next_direction == "West":
-			return "Left"
+			return "a"
 		elif current_direction == "South" and next_direction == "East":
-			return "Left"
+			return "a"
 		elif current_direction == "South" and next_direction == "West":
-			return "Right"
+			return "d"
 		elif current_direction == "East" and next_direction == "North":
-			return "Left"
+			return "a"
 		elif current_direction == "East" and next_direction == "South":
 			return "d"
 		elif current_direction == "West" and next_direction == "North":
@@ -607,4 +607,5 @@ print(route)
 # path = grid.a_star_search_multiple_obstacles((0, 2), grid.get_goals(grid.get_obstacle_vertices()))
 # route = grid.movement_instructions(grid.summarize_path(path, grid.get_goals(grid.get_obstacle_vertices())), "North")
 # route = [x for x in route if x != ['W', 0]]
+
 # print(route)
