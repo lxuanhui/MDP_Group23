@@ -487,10 +487,12 @@ class GridGraph:
 					facing = self.facing
 					loc = "[" + str(self.x) +","+ str(self.y) +","+ str(facing) + "]"
 					if counter <10:
-						counter = "0"+str(counter)+")"
+						counter = "0"+str(counter)+"0)"
 					else:
 						counter = str(counter)+"0)"
-					dictmove = {"m": 'w'+counter, "o": command[3],"r":1, "rp": loc}
+					dictmove = {"m": 'w'+counter, "o": command[3],"r":0, "rp": loc}
+					instruction_list.append(dictmove)
+					dictmove = {"m": "", "o": command[3], "r": 1, "rp": loc}
 					instruction_list.append(dictmove)
 					# instruction_list.append(['W', counter,"Reached obstacle: ", command[3],loc,facing]) #not needed cause using dict
 					#direction , distance, going to / reached obstacle , obstacle name, current location, current facing
@@ -552,8 +554,25 @@ class GridGraph:
 		else:
 			return "b"
 
-# '[[1,(4,3),"N']- ]
+grid_graph = GridGraph(20, 20)
+grid_graph.add_attribute((3, 8), 'obstacle', 'S', 1)
+grid_graph.add_attribute((3, 12), 'obstacle', 'N', 2)
 #
+grid_graph.add_attribute((3, 16), 'obstacle', 'S', 3)
+grid_graph.add_attribute((14, 7), 'obstacle', 'N', 4)
+grid_graph.add_attribute((6, 17), 'obstacle', 'W', 5)
+#
+# grid_graph.add_attribute((16, 3), 'obstacle', 'W', 6)
+# grid_graph.add_attribute((14, 18), 'obstacle', 'S', 7)
+# grid_graph.add_attribute((18, 10), 'obstacle', 'W', 8)
+
+grid_graph.plot(path=grid_graph.a_star_search_multiple_obstacles((1, 2), grid_graph.get_goals(grid_graph.get_obstacle_vertices())))
+
+path = grid_graph.a_star_search_multiple_obstacles((1, 2), grid_graph.get_goals(grid_graph.get_obstacle_vertices()))
+route = grid_graph.movement_instructions(
+    grid_graph.summarize_path(path, grid_graph.get_goals(grid_graph.get_obstacle_vertices())), "n")
+
+print (route)
 # grid_graph = GridGraph(20, 20)
 # grid_graph.add_attribute((3, 8), 'obstacle', 'S', 1)
 # grid_graph.add_attribute((2, 12), 'obstacle', 'N', 2)
@@ -614,47 +633,5 @@ class GridGraph:
 # # print(route)
 #
 #
-# grid_graph = GridGraph(20, 20)
-# grid_graph.add_attribute((2, 12), 'obstacle', 'S', 1)
-# grid_graph.add_attribute((14, 7), 'obstacle', 'W', 2)
-#
-# grid_graph.add_attribute((8, 3), 'obstacle', 'N', 3)
-# grid_graph.add_attribute((15, 16), 'obstacle', 'W', 4)
-# # grid_graph.add_attribute((6, 17), 'obstacle', 'W', 5)
-# #
-# # grid_graph.add_attribute((16, 3), 'obstacle', 'W', 6)
-# # grid_graph.add_attribute((14, 18), 'obstacle', 'S', 7)
-# # grid_graph.add_attribute((18, 10), 'obstacle', 'W', 8)
-#
-# grid_graph.plot(path=grid_graph.a_star_search_multiple_obstacles((1, 2), grid_graph.get_goals(
-# 	grid_graph.get_obstacle_vertices())))
-#
-# path = grid_graph.a_star_search_multiple_obstacles((1, 2), grid_graph.get_goals(grid_graph.get_obstacle_vertices()))
-# route = grid_graph.movement_instructions(
-# 	grid_graph.summarize_path(path, grid_graph.get_goals(grid_graph.get_obstacle_vertices())), "n")
-# print(route)
-# sending =[]
-# for x in range(10):
-# 	sending.append(route[x]["m"])
-# print(sending)
-#
-#
-#
-#
-# with open('route.json', 'w') as outfile:
-# 	json.dump(route, outfile)
-#
-# with open('route.json','r') as f:
-# 	data = json.load(f)
-# 	print(data)
-# for i in data:
-# 	print(i["m"])
-# 	print(type(i["m"])) #string movement
-# 	print(type(i["o"])) #int obstacle ID
-# 	print(type(i["r"])) #int reached 0 or 1
-# 	print(type(i["rp"])) #list of x,y, reached position
-#
-# p = subprocess.Popen(["scp", "route.json", "mdp-group23@192.168.23.23:/home/mdp-group23/Desktop"])
-# sts= p.wait()
-# print("successfully send to rpi")
+
 
