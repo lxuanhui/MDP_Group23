@@ -485,7 +485,8 @@ class GridGraph:
 					facing = self.facing
 					self.updatePosNfacing(counter, facing,current_direction)
 					facing = self.facing
-					loc = "[" + str(self.x) +","+ str(self.y) +","+ str(facing) + "]"
+					# loc = "[" + str(self.x) +","+ str(self.y) +","+ str(facing) + "]"
+					loc = [self.x, self.y, facing]
 					if counter <10:
 						counter = "0"+str(counter)+"0)"
 					else:
@@ -503,7 +504,8 @@ class GridGraph:
 					facing = self.facing
 					self.updatePosNfacing(counter, facing,current_direction)  # force to increase the direction it was facing
 					facing = self.facing
-					loc = "[" + str(self.x) +","+ str(self.y) +","+ str(facing) + "]"
+					# loc = "[" + str(self.x) +","+ str(self.y) +","+ str(facing) + "]"
+					loc =[self.x,self.y,facing]
 					if counter <10:
 						counter = "0"+str(counter)+"0)"
 					else:
@@ -514,8 +516,8 @@ class GridGraph:
 
 				self.updatePosNfacing(1, command[0], current_direction) #update base on the turn direction dist pass in is 1 because turning takes up 1 only
 				facing = self.facing
-				loc = "[" + str(self.x) +","+ str(self.y) +","+ str(facing) + "]"
-
+				# loc = "[" + str(self.x) +","+ str(self.y) +","+ str(facing) + "]"
+				loc = [self.x, self.y, facing]
 				dictmove = {"movement": self.check_next_direction(current_direction, command[0]) + "010)", "obstacle": command[3], "reached": 0, "robotPosition": loc}
 				instruction_list.append(dictmove)
 				current_direction = command[0]
@@ -549,14 +551,14 @@ class GridGraph:
 		else:
 			#TODO make the reverse z or b. z is for clockwise and b is for anti clockwise
 			if current_direction == "n" and self.x <= 2:
-				return "z"
+				return "b" #something on the left
 			elif current_direction == "n" and self.x >= 18:
-				return "z"
+				return "z" #something on the right
 			elif current_direction == "s" and self.x <= 2:
-				return "b"
-			elif current_direction == "s" and self.x >= 18:
 				return "z"
-			return "b"
+			elif current_direction == "s" and self.x >= 18:
+				return "b"
+			return "b" #default
 
 grid = GridGraph(21, 21)
 grid.add_attribute((1,12),'obstacle','S',1)
