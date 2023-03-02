@@ -317,7 +317,7 @@ class GridGraph:
 
 	def a_star(self, start, goal):
 		def heuristic(vertex):
-			return self.euclidean_distance(vertex, goal)
+			return self.manhattan_distance(vertex, goal)
 
 		visited = set()
 		heap = [(0, start, None, None)]
@@ -335,7 +335,7 @@ class GridGraph:
 				cost = g_score[current] + self.weights.get((current, neighbor), self.default_weight)
 				direction = (neighbor[0] - current[0], neighbor[1] - current[1])
 				if previous is not None and direction != previous_direction:
-					cost += 2
+					cost += 20
 				if neighbor not in g_score or cost < g_score[neighbor]:
 					g_score[neighbor] = cost
 					priority = cost + heuristic(neighbor)
@@ -486,7 +486,7 @@ class GridGraph:
 					self.updatePosNfacing(counter, facing,current_direction)
 					facing = self.facing
 					# loc = "[" + str(self.x) +","+ str(self.y) +","+ str(facing) + "]"
-					loc = [self.x, self.y, facing]
+					loc = [self.x, self.y-1, facing]
 					if counter <10:
 						counter = "0"+str(counter)+"0)"
 					else:
@@ -505,7 +505,7 @@ class GridGraph:
 					self.updatePosNfacing(counter, facing,current_direction)  # force to increase the direction it was facing
 					facing = self.facing
 					# loc = "[" + str(self.x) +","+ str(self.y) +","+ str(facing) + "]"
-					loc =[self.x,self.y,facing]
+					loc =[self.x,self.y-1,facing]
 					if counter <10:
 						counter = "0"+str(counter)+"0)"
 					else:
@@ -517,7 +517,7 @@ class GridGraph:
 				self.updatePosNfacing(1, command[0], current_direction) #update base on the turn direction dist pass in is 1 because turning takes up 1 only
 				facing = self.facing
 				# loc = "[" + str(self.x) +","+ str(self.y) +","+ str(facing) + "]"
-				loc = [self.x, self.y, facing]
+				loc = [self.x, self.y-1, facing]
 				dictmove = {"movement": self.check_next_direction(current_direction, command[0]) + "010)", "obstacle": command[3], "reached": 0, "robotPosition": loc}
 				instruction_list.append(dictmove)
 				current_direction = command[0]
@@ -552,25 +552,25 @@ class GridGraph:
 			#TODO make the reverse z or b. z is for clockwise and b is for anti clockwise
 			if current_direction == "n" and self.x <= 2:
 				return "b" #something on the left
-			elif current_direction == "n" and self.x >= 18:
+			elif current_direction == "n" and self.x >= 17:
 				return "z" #something on the right
 			elif current_direction == "s" and self.x <= 2:
 				return "z"
-			elif current_direction == "s" and self.x >= 18:
+			elif current_direction == "s" and self.x >= 17:
 				return "b"
 			return "b" #default
 
-grid = GridGraph(21, 21)
-grid.add_attribute((1,12),'obstacle','S',1)
-grid.add_attribute((14, 7), 'obstacle', 'W', 2)
-
-grid.add_attribute((3, 4), 'obstacle', 'N', 3)
-grid.add_attribute((14, 15), 'obstacle', 'W', 4)
-path = grid.a_star_search_multiple_obstacles((0, 2), grid.get_goals(grid.get_obstacle_vertices()))
-route = grid.movement_instructions(grid.summarize_path(path, grid.get_goals(grid.get_obstacle_vertices())), "n")
-grid.plot(	path = grid.a_star_search_multiple_obstacles((0, 2), grid.get_goals(grid.get_obstacle_vertices())))
-
-print (route)
+# grid = GridGraph(21, 21)
+# grid.add_attribute((4,1),'obstacle','N',1)
+# grid.add_attribute((14, 7), 'obstacle', 'W', 2)
+#
+# # grid.add_attribute((3, 4), 'obstacle', 'N', 3)
+# grid.add_attribute((14, 15), 'obstacle', 'W', 4)
+# path = grid.a_star_search_multiple_obstacles((1, 2), grid.get_goals(grid.get_obstacle_vertices()))
+# route = grid.movement_instructions(grid.summarize_path(path, grid.get_goals(grid.get_obstacle_vertices())), "n")
+# grid.plot(	path = grid.a_star_search_multiple_obstacles((1, 2), grid.get_goals(grid.get_obstacle_vertices())))
+#
+# # print (route)
 # grid_graph.add_attribute((3, 8), 'obstacle', 'S', 1)
 # grid_graph.add_attribute((3, 12), 'obstacle', 'N', 2)
 # #

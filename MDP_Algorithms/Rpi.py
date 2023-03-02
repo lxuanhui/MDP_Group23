@@ -34,20 +34,32 @@ while 1:
         print("obstacle",type(obstacle))
     for obj in newList:
         print("in for loop ", obj)
-        print(type(obj),obj['obstacle'][1][0],obj['obstacle'][1][1]+1)
-        grid.add_attribute((obj['obstacle'][1][0],obj['obstacle'][1][1]+1), "obstacle", obj['obstacle'][2], obj['obstacle'][0])
+        print(type(obj),obj['obstacle'][1][0],obj['obstacle'][1][1]+2)
+        grid.add_attribute((obj['obstacle'][1][0],obj['obstacle'][1][1]+2), "obstacle", obj['obstacle'][2], obj['obstacle'][0])
 
     # grid.add_attribute((3,12),'obstacle','S',1)
     # grid.add_attribute((14, 7), 'obstacle', 'W', 2)
     #
     # grid.add_attribute((8, 4), 'obstacle', 'N', 3)
     # grid.add_attribute((14, 15), 'obstacle', 'W', 4)
-    path = grid.a_star_search_multiple_obstacles((1, 2), grid.get_goals(grid.get_obstacle_vertices()))
+
+
+
+    path = grid.a_star_search_multiple_obstacles((1, 3), grid.get_goals(grid.get_obstacle_vertices()))
     route = grid.movement_instructions(grid.summarize_path(path, grid.get_goals(grid.get_obstacle_vertices())), "n")
 
     grid.plot(path)
+    # path = []
+    # dict ={'movement': 'a010)', 'obstacle': 2, 'reached': 0, 'robotPosition': [16, 12, 'n']}
+    # path.append(dict)
+    # dict2 ={'movement': 'd010)', 'obstacle': 2, 'reached': 0, 'robotPosition': [16, 12, 'n']}
+    # print(route)
 
-    print(route)
+    # path.append(dict2)
+    # path.append(dict)
+    # path.append(dict2)
+    # path.append(dict)
+    # route = path
     with open('route.json', 'w') as outfile:
         json.dump(route, outfile)
 
