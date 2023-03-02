@@ -34,28 +34,32 @@ while 1:
         print("obstacle",type(obstacle))
     for obj in newList:
         print("in for loop ", obj)
-        print(type(obj),obj['obstacle'][1][0],obj['obstacle'][1][1])
-        grid.add_attribute((obj['obstacle'][1][0],obj['obstacle'][1][1]), "obstacle", obj['obstacle'][2], obj['obstacle'][0])
+        print(type(obj),obj['obstacle'][1][0],obj['obstacle'][1][1]+1)
+        grid.add_attribute((obj['obstacle'][1][0],obj['obstacle'][1][1]+1), "obstacle", obj['obstacle'][2], obj['obstacle'][0])
 
     # grid.add_attribute((3,12),'obstacle','S',1)
     # grid.add_attribute((14, 7), 'obstacle', 'W', 2)
     #
     # grid.add_attribute((8, 4), 'obstacle', 'N', 3)
     # grid.add_attribute((14, 15), 'obstacle', 'W', 4)
-    path = grid.a_star_search_multiple_obstacles((0, 2), grid.get_goals(grid.get_obstacle_vertices()))
+    path = grid.a_star_search_multiple_obstacles((1, 2), grid.get_goals(grid.get_obstacle_vertices()))
     route = grid.movement_instructions(grid.summarize_path(path, grid.get_goals(grid.get_obstacle_vertices())), "n")
 
+    grid.plot(path)
 
+    print(route)
+    with open('route.json', 'w') as outfile:
+        json.dump(route, outfile)
 
-    # # route = [x for x in route if x != ['W', 0]]
-    # delim = "#"
-    # result = ''
-    # for i in route :
-    #     result = result +str(i)+delim
-    # print(result)
+    with open('route.json', 'r') as f:
+        data = json.load(f)
+        # print(data)
 
-
-
+    p = subprocess.Popen(["scp", "route.json", "mdp-group23@192.168.23.23:/home/mdp-group23/Desktop"])
+    sts = p.wait()
+    x = json.dumps(route)
+    clientsocket.send(x.encode())
+    print("SENT")
 
 
     # result = "[{'movement': 'w020)', 'obstacle: ': 1, 'reached': 0, 'robotPosition': [1, 4, 'North']}, {'movement': 'd010)', 'obstacle: ': 1, 'reached': 0, 'robotPosition': [2, 4, 'East']}"
@@ -78,19 +82,3 @@ while 1:
     # path = grid_graph.a_star_search_multiple_obstacles((1, 2), grid_graph.get_goals(grid_graph.get_obstacle_vertices()))
     # route = grid_graph.movement_instructions(
     #     grid_graph.summarize_path(path, grid_graph.get_goals(grid_graph.get_obstacle_vertices())), "North")
-
-    print(route)
-    with open('route.json', 'w') as outfile:
-        json.dump(route, outfile)
-
-    with open('route.json', 'r') as f:
-        data = json.load(f)
-        print(data)
-
-    p = subprocess.Popen(["scp", "route.json", "mdp-group23@192.168.23.23:/home/mdp-group23/Desktop"])
-    sts = p.wait()
-    x = json.dumps(route)
-    clientsocket.send(x.encode())
-    print("SENT")
-
-
