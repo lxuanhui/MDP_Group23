@@ -490,15 +490,10 @@ class GridGraph:
 						counter = "0"+str(counter)+"0)"
 					else:
 						counter = str(counter)+"0)"
-					dictmove = {"m": 'w'+counter, "o": command[3],"r":0, "rp": loc}
+					dictmove = {"movement": 'w'+counter, "obstacle": command[3],"reached":0, "robotPosition": loc}
 					instruction_list.append(dictmove)
-					dictmove = {"m": "", "o": command[3], "r": 1, "rp": loc}
+					dictmove = {"movement": "", "obstacle": command[3], "reached": 1, "robotPosition": loc}
 					instruction_list.append(dictmove)
-					# instruction_list.append(['W', counter,"Reached obstacle: ", command[3],loc,facing]) #not needed cause using dict
-					#direction , distance, going to / reached obstacle , obstacle name, current location, current facing
-					# instruction_list.append(["Reached obstacle: ", command[3]])
-
-
 					current_direction = command[0]
 					counter = 0
 
@@ -513,7 +508,7 @@ class GridGraph:
 						counter = "0"+str(counter)+"0)"
 					else:
 						counter = str(counter)+"0)"
-					dictmove = {"m": 'w' + counter, "o": command[3], "r": 0, "rp": loc}
+					dictmove = {"movement": 'w' + counter, "obstacle": command[3], "reached": 0, "robotPosition": loc}
 					instruction_list.append(dictmove)
 					# instruction_list.append(['W', counter, "Going to obstacle: ",command[3],loc,facing])
 
@@ -521,13 +516,13 @@ class GridGraph:
 				facing = self.facing
 				loc = "[" + str(self.x) +","+ str(self.y) +","+ str(facing) + "]"
 
-				dictmove = {"m": self.check_next_direction(current_direction, command[0]) + "010)", "o": command[3], "r": 0, "rp": loc}
+				dictmove = {"movement": self.check_next_direction(current_direction, command[0]) + "010)", "obstacle": command[3], "reached": 0, "robotPosition": loc}
 				instruction_list.append(dictmove)
 				current_direction = command[0]
 				# instruction_list.append([self.check_next_direction(current_direction, command[0]), '010)',"Going to obstacle: ",command[3],loc,facing])
 				if command[2] == "Reached obstacle: ":
 					# instruction_list.append(["Reached obstacle: ", command[3],loc,facing])
-					dictmove = {"m": "", "o": command[3], "r": 1, "rp": loc}
+					dictmove = {"movement": "", "obstacle": command[3], "reached": 1, "robotPosition": loc}
 					instruction_list.append(dictmove)
 				counter = 0
 
@@ -563,11 +558,11 @@ class GridGraph:
 				return "z"
 			return "b"
 
-grid = GridGraph(20, 20)
+grid = GridGraph(21, 21)
 grid.add_attribute((1,12),'obstacle','S',1)
 grid.add_attribute((14, 7), 'obstacle', 'W', 2)
 
-grid.add_attribute((8, 4), 'obstacle', 'N', 3)
+grid.add_attribute((3, 4), 'obstacle', 'N', 3)
 grid.add_attribute((14, 15), 'obstacle', 'W', 4)
 path = grid.a_star_search_multiple_obstacles((0, 2), grid.get_goals(grid.get_obstacle_vertices()))
 route = grid.movement_instructions(grid.summarize_path(path, grid.get_goals(grid.get_obstacle_vertices())), "n")
