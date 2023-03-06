@@ -498,14 +498,14 @@ class GridGraph:
 					self.updatePosNfacing(counter, facing,current_direction)
 					facing = self.facing
 					# loc = "[" + str(self.x) +","+ str(self.y) +","+ str(facing) + "]"
-					loc = [self.x, self.y-1, facing]
+					loc = [self.x, self.y, facing]
 					if counter <10:
 						counter = "0"+str(counter)+"0)"
 					else:
 						counter = str(counter)+"0)"
-					dictmove = {"movement": 'w'+counter, "obstacle": command[3],"reached":0, "robotPosition": loc}
+					dictmove = {"movement": 'w'+counter, "obstacle": command[3],"reached":0, "robotPosition": loc, "status":"Moving"}
 					instruction_list.append(dictmove)
-					dictmove = {"movement": "", "obstacle": command[3], "reached": 1, "robotPosition": loc}
+					dictmove = {"movement": "", "obstacle": command[3], "reached": 1, "robotPosition": loc,"status":"Capturing Image"}
 					instruction_list.append(dictmove)
 					current_direction = command[0]
 					counter = 0
@@ -517,26 +517,26 @@ class GridGraph:
 					self.updatePosNfacing(counter, facing,current_direction)  # force to increase the direction it was facing
 					facing = self.facing
 					# loc = "[" + str(self.x) +","+ str(self.y) +","+ str(facing) + "]"
-					loc =[self.x,self.y-1,facing]
+					loc =[self.x,self.y,facing]
 					if counter <10:
 						counter = "0"+str(counter)+"0)"
 					else:
 						counter = str(counter)+"0)"
-					dictmove = {"movement": 'w' + counter, "obstacle": command[3], "reached": 0, "robotPosition": loc}
+					dictmove = {"movement": 'w' + counter, "obstacle": command[3], "reached": 0, "robotPosition": loc,"status":"Moving"}
 					instruction_list.append(dictmove)
 					# instruction_list.append(['W', counter, "Going to obstacle: ",command[3],loc,facing])
 
 				self.updatePosNfacing(1, command[0], current_direction) #update base on the turn direction dist pass in is 1 because turning takes up 1 only
 				facing = self.facing
 				# loc = "[" + str(self.x) +","+ str(self.y) +","+ str(facing) + "]"
-				loc = [self.x, self.y-1, facing]
-				dictmove = {"movement": self.check_next_direction(current_direction, command[0]) + "010)", "obstacle": command[3], "reached": 0, "robotPosition": loc}
+				loc = [self.x, self.y, facing]
+				dictmove = {"movement": self.check_next_direction(current_direction, command[0]) + "010)", "obstacle": command[3], "reached": 0, "robotPosition": loc,"status":"Turning"}
 				instruction_list.append(dictmove)
 				current_direction = command[0]
 				# instruction_list.append([self.check_next_direction(current_direction, command[0]), '010)',"Going to obstacle: ",command[3],loc,facing])
 				if command[2] == "Reached obstacle: ":
 					# instruction_list.append(["Reached obstacle: ", command[3],loc,facing])
-					dictmove = {"movement": "", "obstacle": command[3], "reached": 1, "robotPosition": loc}
+					dictmove = {"movement": "", "obstacle": command[3], "reached": 1, "robotPosition": loc,"status":"Capturing Image"}
 					instruction_list.append(dictmove)
 				counter = 0
 
