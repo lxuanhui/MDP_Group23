@@ -34,8 +34,8 @@ while 1:
         print("obstacle",type(obstacle))
     for obj in newList:
         print("in for loop ", obj)
-        print(type(obj),obj['obstacle'][1][0],obj['obstacle'][1][1]+2)
-        grid.add_attribute((obj['obstacle'][1][0],obj['obstacle'][1][1]+2), "obstacle", obj['obstacle'][2], obj['obstacle'][0])
+        print(type(obj),obj['obstacle'][1][0],obj['obstacle'][1][1]+1)
+        grid.add_attribute((obj['obstacle'][1][0],obj['obstacle'][1][1]+1), "obstacle", obj['obstacle'][2], obj['obstacle'][0])
 
     # grid.add_attribute((3,12),'obstacle','S',1)
     # grid.add_attribute((14, 7), 'obstacle', 'W', 2)
@@ -45,7 +45,7 @@ while 1:
 
 
 
-    path = grid.a_star_search_multiple_obstacles((1, 3), grid.get_goals(grid.get_obstacle_vertices()))
+    path = grid.a_star_search_multiple_obstacles((0, 3), grid.get_goals(grid.get_obstacle_vertices()))
     route = grid.movement_instructions(grid.summarize_path(path, grid.get_goals(grid.get_obstacle_vertices())), "n")
 
     grid.plot(path)
