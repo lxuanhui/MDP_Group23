@@ -30,6 +30,15 @@ if __name__ == "__main__":
         file.close()
 
         # do image rec
+        print("Doing image rec..")
+        # image_id = imagerec('server_image.jpg')
         imagerec('server_image.jpg')
+
+        # print(image_id)
+        # client_socket.send(image_id.encode())
+        print("Testt2")
+        client_socket.send("ASD".encode())
+        # print("image id sent success")
+        print("testq")
 
         client_socket.close()

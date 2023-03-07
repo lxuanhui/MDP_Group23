@@ -8,7 +8,6 @@ import json
 def imagerec(image_path):
     # Set the URL of the predict endpoint
     url = 'http://localhost:5000/predict'
-
     # Set the image file path
     # image_path = r'/Users/abc/Downloads/content/datasets/MDP_Proj-1/test/images/IMG_20230130_192715_jpg.rf.1be6043ac7e4e386c947c3ccea1544a8.jpg'
 
@@ -26,14 +25,17 @@ def imagerec(image_path):
     # Parse the JSON response
     result = json.loads(response.content.decode())
 
-    print(result)
+    print("Printing results:" , result)
+    # return result
 
     with open('imagerec_result.txt', 'w') as f:
-        if 'Bullseye' in result:
-            print("write here")
-            f.write(r"['Bullseye']")
-        else:
-            f.write(str(result))
+        f.write(str(result))
+        # if 'Bullseye' in result:
+        #     print("write here")
+        #     # TODO Need to fix
+        #     f.write(r"['Bullseye']")
+        # else:
+        #     f.write(str(result))
 
     # Send image result to rpi as txt file
     p = subprocess.Popen(["scp", "imagerec_result.txt", "mdp-group23@192.168.23.23:/home/mdp-group23/Desktop"])
