@@ -45,10 +45,12 @@ while 1:
 
 
 
-    path = grid.a_star_search_multiple_obstacles((0, 3), grid.get_goals(grid.get_obstacle_vertices()))
+    path = grid.a_star_search_multiple_obstacles((1, 2), grid.get_goals(grid.get_obstacle_vertices()))
     route = grid.movement_instructions(grid.summarize_path(path, grid.get_goals(grid.get_obstacle_vertices())), "n")
 
     grid.plot(path)
+    print(path)
+    print(route)
     # path = []
     # dict ={'movement': 'a010)', 'obstacle': 2, 'reached': 0, 'robotPosition': [16, 12, 'n']}
     # path.append(dict)
