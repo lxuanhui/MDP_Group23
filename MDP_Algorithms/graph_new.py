@@ -211,9 +211,9 @@ class GridGraph:
 				for neighbor in self.grid[(row + 2, col - 1)]:
 					self.weights[((row + 2, col - 1), neighbor)] = float('inf')
 					self.weights[(neighbor, (row + 2, col - 1))] = float('inf')
-				for neighbor in self.grid[(row + 3, col + 1)]:
-					self.weights[((row + 3, col + 1), neighbor)] = float('inf')
-					self.weights[(neighbor, (row + 3, col + 1))] = float('inf')
+				for neighbor in self.grid[(row + 3, col)]:
+					self.weights[((row + 3, col +1), neighbor)] = float('inf')
+					self.weights[(neighbor, (row + 3, col))] = float('inf')
 				for neighbor in self.grid[(row + 3, col - 1)]:
 					self.weights[((row + 3, col - 1), neighbor)] = float('inf')
 					self.weights[(neighbor, (row + 3, col - 1))] = float('inf')
