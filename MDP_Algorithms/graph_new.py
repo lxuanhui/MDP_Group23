@@ -371,8 +371,6 @@ class GridGraph:
 				direction = (neighbor[0] - current[0], neighbor[1] - current[1])
 				if previous is not None and direction != previous_direction: #if the direction changes, add a penalty
 					cost += 100
-				else : #if the direction doesn't change, add a small penalty
-					cost += 15
 
 				if neighbor not in g_score or cost < g_score[neighbor]:
 					g_score[neighbor] = cost
@@ -599,17 +597,17 @@ class GridGraph:
 			return "b" #default
 
 grid = GridGraph(21, 21)
-# grid.add_attribute((3,8),'obstacle','S',1)
-grid.add_attribute((2,19 ), 'obstacle', 'S', 2)
-# grid.add_attribute((10,4),'obstacle', 'W', 3)
-grid.add_attribute((13, 17), 'obstacle', 'S', 4)
-grid.add_attribute((16, 10), 'obstacle', 'S', 5)
-grid.add_attribute((18, 2), 'obstacle', 'W', 6)
-path = grid.a_star_search_multiple_obstacles((0, 2), grid.get_goals(grid.get_obstacle_vertices()))
+grid.add_attribute((3, 8),'obstacle','S',1)
+grid.add_attribute((9,15 ), 'obstacle', 'S', 2)
+grid.add_attribute((10, 4),'obstacle', 'W', 3)
+# grid.add_attribute((13, 17), 'obstacle', 'S', 4)
+# grid.add_attribute((16, 10), 'obstacle', 'W', 5)
+# grid.add_attribute((18, 2), 'obstacle', 'N', 6)
+path = grid.a_star_search_multiple_obstacles((1, 2), grid.get_goals(grid.get_obstacle_vertices()))
 route = grid.movement_instructions(grid.summarize_path(path, grid.get_goals(grid.get_obstacle_vertices())), "n")
-grid.plot(path = grid.a_star_search_multiple_obstacles((0, 2), grid.get_goals(grid.get_obstacle_vertices())))
+grid.plot(path=grid.a_star_search_multiple_obstacles((1, 2), grid.get_goals(grid.get_obstacle_vertices())))
 print(grid.get_goals(grid.get_obstacle_vertices()))
-# print(path)
+print(path)
 # print(route)
 # print(grid.get_edge_weights((1,13)))
 # # print
