@@ -616,9 +616,20 @@ grid.add_attribute((18, 2), 'obstacle', 'N', 6)
 path = grid.a_star_search_multiple_obstacles((0, 2), grid.get_goals(grid.get_obstacle_vertices()))
 route = grid.movement_instructions(grid.summarize_path(path, grid.get_goals(grid.get_obstacle_vertices())), "n")
 grid.plot(path=grid.a_star_search_multiple_obstacles((0, 2), grid.get_goals(grid.get_obstacle_vertices())))
-print(grid.get_goals(grid.get_obstacle_vertices()))
+# print(grid.get_goals(grid.get_obstacle_vertices()))
 # print(path)
-# print(route)
+print(route)
+for i in range (len(route)):
+	if route[i]["movement"] == "b010)" or route[i]["movement"] == "z010)":
+			if route[i+1]["movement"] == "a010)":
+				route[i]["movement"] = "s010)"
+				route[i+1]["movement"] = "d010)"
+
+			elif route[i+1]["movement"] == "d010)":
+				route[i]["movement"] = "s010)"
+				route[i+1]["movement"] = "a010)"
+
+print("new " , route)
 # for each in path:
 # 	print(each ," s", grid.get_edge_weights(each))
 # print(grid.get_edge_weights((1,13)))
