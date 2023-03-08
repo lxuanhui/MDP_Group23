@@ -47,6 +47,15 @@ while 1:
 
     path = grid.a_star_search_multiple_obstacles((1, 2), grid.get_goals(grid.get_obstacle_vertices()))
     route = grid.movement_instructions(grid.summarize_path(path, grid.get_goals(grid.get_obstacle_vertices())), "n")
+    for i in range(len(route)):
+        if route[i]["movement"] == "b010)" or route[i]["movement"] == "z010)":
+            if route[i + 1]["movement"] == "a010)":
+                route[i]["movement"] = "s010)"
+                route[i + 1]["movement"] = "d010)"
+
+            elif route[i + 1]["movement"] == "d010)":
+                route[i]["movement"] = "s010)"
+                route[i + 1]["movement"] = "a010)"
 
     grid.plot(path)
     print(path)
@@ -77,7 +86,7 @@ while 1:
 
 
     # result = "[{'movement': 'w020)', 'obstacle: ': 1, 'reached': 0, 'robotPosition': [1, 4, 'North']}, {'movement': 'd010)', 'obstacle: ': 1, 'reached': 0, 'robotPosition': [2, 4, 'East']}"
-
+    print ("1,17",grid.get_edge_weights((1,17)))
     # result = list({"movement": "w020)", "obstacle": 1, "reached": 0, "robotPosition": [1, 4, "North"]}, {"movement": "d010)", "obstacle": 1, "reached": 0, "robotPosition": [2, 4, "East"]})
     # grid_graph = GridGraph(20, 20)
     # grid_graph.add_attribute((3, 8), 'obstacle', 'S', 1)

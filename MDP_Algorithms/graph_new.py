@@ -600,36 +600,27 @@ class GridGraph:
 				return "b"
 			return "b" #default
 
-grid = GridGraph(21, 21)
+# grid = GridGraph(21, 21)
 #ADD OBSTACLE  0,19 S
 # grid.add_attribute((5, 7),'obstacle','E',1)
 # grid.add_attribute((11,15),'obstacle','W',2)
 # grid.add_attribute((16, 12),'obstacle','N',3)
 
 
-grid.add_attribute((3, 8),'obstacle','S',1)
-grid.add_attribute((9,15 ), 'obstacle', 'S', 2)
-grid.add_attribute((10, 4),'obstacle', 'N', 3)
-grid.add_attribute((13, 17), 'obstacle', 'S', 4)
-grid.add_attribute((16, 10), 'obstacle', 'W', 5)
-grid.add_attribute((18, 2), 'obstacle', 'N', 6)
-path = grid.a_star_search_multiple_obstacles((0, 2), grid.get_goals(grid.get_obstacle_vertices()))
-route = grid.movement_instructions(grid.summarize_path(path, grid.get_goals(grid.get_obstacle_vertices())), "n")
-grid.plot(path=grid.a_star_search_multiple_obstacles((0, 2), grid.get_goals(grid.get_obstacle_vertices())))
+# grid.add_attribute((3, 8),'obstacle','S',1)
+# grid.add_attribute((9,15 ), 'obstacle', 'S', 2)
+# grid.add_attribute((10, 4),'obstacle', 'N', 3)
+# grid.add_attribute((13, 17), 'obstacle', 'S', 4)
+# grid.add_attribute((16, 10), 'obstacle', 'W', 5)
+# grid.add_attribute((18, 2), 'obstacle', 'N', 6)
+# path = grid.a_star_search_multiple_obstacles((0, 2), grid.get_goals(grid.get_obstacle_vertices()))
+# route = grid.movement_instructions(grid.summarize_path(path, grid.get_goals(grid.get_obstacle_vertices())), "n")
+# grid.plot(path=grid.a_star_search_multiple_obstacles((0, 2), grid.get_goals(grid.get_obstacle_vertices())))
 # print(grid.get_goals(grid.get_obstacle_vertices()))
 # print(path)
-print(route)
-for i in range (len(route)):
-	if route[i]["movement"] == "b010)" or route[i]["movement"] == "z010)":
-			if route[i+1]["movement"] == "a010)":
-				route[i]["movement"] = "s010)"
-				route[i+1]["movement"] = "d010)"
-
-			elif route[i+1]["movement"] == "d010)":
-				route[i]["movement"] = "s010)"
-				route[i+1]["movement"] = "a010)"
-
-print("new " , route)
+# print(route)
+#
+# print("new " , route)
 # for each in path:
 # 	print(each ," s", grid.get_edge_weights(each))
 # print(grid.get_edge_weights((1,13)))
