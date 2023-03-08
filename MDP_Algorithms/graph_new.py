@@ -164,6 +164,8 @@ class GridGraph:
 				self.attributes[(row + 1, col - 2)]['wall'] = True
 				self.attributes[(row - 1, col - 3)]['wall'] = True
 				self.attributes[(row + 1, col - 3)]['wall'] = True
+				self.attributes[(row - 1, col - 4)]['wall'] = True
+				self.attributes[(row + 1, col - 4)]['wall'] = True
 				for neighbor in self.grid[(row - 1, col - 2)]:
 					self.weights[((row - 1, col - 2), neighbor)] = float('inf')
 					self.weights[(neighbor, (row - 1, col - 2))] = float('inf')
@@ -176,7 +178,14 @@ class GridGraph:
 				for neighbor in self.grid[(row, col - 3)]:
 					self.weights[((row, col - 3), neighbor)] = float('inf')
 					self.weights[(neighbor, (row, col - 3))] = float('inf')
-				return ((row + 1, col - 4),'S',	obstacleID)
+				for neighbor in self.grid[(row - 1, col - 4)]:
+					self.weights[((row - 1, col - 4), neighbor)] = float('inf')
+					self.weights[(neighbor, (row - 1, col - 4))] = float('inf')
+				for neighbor in self.grid[(row, col - 4)]:
+					self.weights[((row, col - 4), neighbor)] = 9999999
+					self.weights[(neighbor, (row, col - 4))] = 9999999
+
+				return ((row , col - 4),'S',	obstacleID)
 			except KeyError:
 				if row - 1 < 0:
 					self.attributes[(row + 1, col - 2)]['wall'] = True
@@ -187,7 +196,7 @@ class GridGraph:
 					for neighbor in self.grid[(row, col - 3)]:
 						self.weights[((row, col - 3), neighbor)] = float('inf')
 						self.weights[(neighbor, (row, col - 3))] = float('inf')
-					return ((row + 1, col - 4), 'S', obstacleID)
+					return ((row , col - 4), 'S', obstacleID)
 				elif row + 1 >= 20:
 					self.attributes[(row - 1, col - 2)]['wall'] = True
 					self.attributes[(row - 1, col - 3)]['wall'] = True
@@ -228,16 +237,16 @@ class GridGraph:
 					for neighbor in self.grid[(row + 3, col - 1)]:
 						self.weights[((row + 3, col - 1), neighbor)] = float('inf')
 						self.weights[(neighbor, (row + 3, col - 1))] = float('inf')
-					return ((row + 3, col), 'E', obstacleID)
+					return ((row + 3, col ), 'E', obstacleID)
 				elif col - 1 < 0:
 					self.attributes[(row + 2, col + 1)]['wall'] = True
 					self.attributes[(row + 3, col + 1)]['wall'] = True
 					for neighbor in self.grid[(row + 2, col + 1)]:
 						self.weights[((row + 2, col + 1), neighbor)] = float('inf')
 						self.weights[(neighbor, (row + 2, col + 1))] = float('inf')
-					for neighbor in self.grid[(row + 3, col + 1)]:
-						self.weights[((row + 3, col + 1), neighbor)] = float('inf')
-						self.weights[(neighbor, (row + 3, col + 1))] = float('inf')
+					for neighbor in self.grid[(row + 3, col )]:
+						self.weights[((row + 3, col ), neighbor)] = float('inf')
+						self.weights[(neighbor, (row + 3, col +1))] = float('inf')
 					return ((row + 3, col), 'E', obstacleID)
 		elif side == 'W':
 			try:
@@ -257,7 +266,7 @@ class GridGraph:
 				for neighbor in self.grid[(row - 2, col - 1)]:
 					self.weights[((row - 2, col - 1), neighbor)] = float('inf')
 					self.weights[(neighbor, (row - 2, col - 1))] = float('inf')
-				return ((row - 2, col + 1), 'W', obstacleID)
+				return ((row - 2, col ), 'W', obstacleID)
 			except KeyError:
 				if col + 1 >= 21:
 					self.attributes[(row - 1, col - 1)]['wall'] = True
@@ -278,7 +287,7 @@ class GridGraph:
 					for neighbor in self.grid[(row - 2, col)]:
 						self.weights[((row - 2, col), neighbor)] = float('inf')
 						self.weights[(neighbor, (row - 2, col))] = float('inf')
-					return ((row - 2, col + 1), 'W', obstacleID)
+					return ((row - 2, col ), 'W', obstacleID)
 
 	def get_goals(self, obstacle_vertices):
 		return [self.get_obstacle_side_node(obstacle_vertex) for obstacle_vertex in obstacle_vertices]
@@ -365,23 +374,8 @@ class GridGraph:
 					continue
 				cost = g_score[current] + self.weights.get((current, neighbor), self.default_weight)
 				direction = (neighbor[0] - current[0], neighbor[1] - current[1])
-				if direction == (0, -1):
-					# Add a negative cost for moving straight North
-					cost -= 50
-				elif previous is not None:
-					prev_direction, prev2_direction = None, None
-					if previous_direction is not None:
-						prev_direction = previous_direction
-						if came_from.get(previous) is not None:
-							prev2_direction = (
-								previous[0] - came_from[previous][0], previous[1] - came_from[previous][1])
-					if prev_direction is not None and prev2_direction is not None and direction != prev_direction and sum(
-							direction) == -sum(prev2_direction):
-						# Add a penalty for consecutive turns in any direction
-						cost += 100
-					elif direction != prev_direction:
-						# Add a penalty for a turn
-						cost += 100
+				if previous is not None and direction != previous_direction:
+					cost += 100
 				if neighbor not in g_score or cost < g_score[neighbor]:
 					g_score[neighbor] = cost
 					priority = cost + heuristic(neighbor)
@@ -606,16 +600,16 @@ class GridGraph:
 				return "b"
 			return "b" #default
 
-grid = GridGraph(21, 21)
-grid.add_attribute((6,5),'obstacle','E',1)
-grid.add_attribute((17, 6), 'obstacle', 'W', 2)
-grid.add_attribute((1,20),'obstacle', 'S', 5)
+# grid = GridGraph(21, 21)
+# grid.add_attribute((8,7),'obstacle','N',1)
+# grid.add_attribute((10, 16), 'obstacle', 'W', 2)
+# grid.add_attribute((1,20),'obstacle', 'S', 5)
 # grid.add_attribute((0, 15), 'obstacle', 'E', 3)
 # grid.add_attribute((11, 5), 'obstacle', 'E', 4)
 # grid.add_attribute((17, 5), 'obstacle', 'N', 4)
-path = grid.a_star_search_multiple_obstacles((0, 2), grid.get_goals(grid.get_obstacle_vertices()))
-route = grid.movement_instructions(grid.summarize_path(path, grid.get_goals(grid.get_obstacle_vertices())), "n")
-grid.plot(	path = grid.a_star_search_multiple_obstacles((0, 2), grid.get_goals(grid.get_obstacle_vertices())))
+# path = grid.a_star_search_multiple_obstacles((0, 2), grid.get_goals(grid.get_obstacle_vertices()))
+# route = grid.movement_instructions(grid.summarize_path(path, grid.get_goals(grid.get_obstacle_vertices())), "n")
+# grid.plot(	path = grid.a_star_search_multiple_obstacles((0, 2), grid.get_goals(grid.get_obstacle_vertices())))
 # print(grid.get_goals(grid.get_obstacle_vertices()))
 # print(path)
 # print(route)
