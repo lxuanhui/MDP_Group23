@@ -120,23 +120,24 @@ class GridGraph:
 		obstacleID = self.attributes[obstacle_vertex]['obstacleID']
 		if side == 'N':
 			try:
-				self.attributes[(row - 1, col + 1)]['wall'] = True
-				self.attributes[(row + 1, col + 1)]['wall'] = True
-				self.attributes[(row - 1, col + 2)]['wall'] = True
-				self.attributes[(row + 1, col + 2)]['wall'] = True
-				for neighbor in self.grid[(row - 1, col + 1)]:
-					self.weights[((row - 1, col + 1), neighbor)] = float('inf')
-					self.weights[(neighbor, (row - 1, col + 1))] = float('inf')
-				for neighbor in self.grid[(row + 1, col + 1)]:
-					self.weights[((row + 1, col + 1), neighbor)] = float('inf')
-					self.weights[(neighbor, (row + 1, col + 1))] = float('inf')
-				for neighbor in self.grid[(row - 1, col + 2)]:
-					self.weights[((row - 1, col + 2), neighbor)] = float('inf')
-					self.weights[(neighbor, (row - 1, col + 2))] = float('inf')
-				for neighbor in self.grid[(row, col + 2)]:
-					self.weights[((row, col + 2), neighbor)] = float('inf')
-					self.weights[(neighbor, (row, col + 2))] = float('inf')
-				return ((row+1, col + 2),'N', obstacleID)
+				# shift the north to the right
+				self.attributes[(row , col + 1)]['wall'] = True
+				self.attributes[(row + 2, col + 1)]['wall'] = True
+				self.attributes[(row , col + 2)]['wall'] = True
+				self.attributes[(row + 2, col + 2)]['wall'] = True
+				for neighbor in self.grid[(row , col + 1)]:
+					self.weights[((row , col + 1), neighbor)] = float('inf')
+					self.weights[(neighbor, (row , col + 1))] = float('inf')
+				for neighbor in self.grid[(row + 2, col + 1)]:
+					self.weights[((row + 2, col + 1), neighbor)] = float('inf')
+					self.weights[(neighbor, (row + 2, col + 1))] = float('inf')
+				for neighbor in self.grid[(row , col + 2)]:
+					self.weights[((row , col + 2), neighbor)] = float('inf')
+					self.weights[(neighbor, (row , col + 2))] = float('inf')
+				for neighbor in self.grid[(row +2, col + 2)]:
+					self.weights[((row + 2 , col + 2), neighbor)] = float('inf')
+					self.weights[(neighbor, (row + 2 , col + 2))] = float('inf')
+				return ((row + 1, col + 2),'N', obstacleID)
 			except KeyError:
 				if row - 1 < 0:
 					self.attributes[(row + 1, col + 1)]['wall'] = True
@@ -145,9 +146,9 @@ class GridGraph:
 						self.weights[((row + 1, col + 1), neighbor)] = float('inf')
 						self.weights[(neighbor, (row + 1, col + 1))] = float('inf')
 					for neighbor in self.grid[(row, col + 2)]:
-						self.weights[((row, col + 2), neighbor)] = float('inf')
-						self.weights[(neighbor, (row, col + 2))] = float('inf')
-					return ((row + 1, col + 2), 'N', obstacleID)
+						self.weights[((row + 1 , col + 2), neighbor)] = float('inf')
+						self.weights[(neighbor, (row + 1 , col + 2))] = float('inf')
+					return ((row , col + 2), 'N', obstacleID)
 				elif row + 1 >= 20 :
 					self.attributes[(row - 1, col + 1)]['wall'] = True
 					self.attributes[(row - 1, col + 2)]['wall'] = True
@@ -201,44 +202,50 @@ class GridGraph:
 
 		elif side == 'E':
 			try:
-				self.attributes[(row + 2, col + 1)]['wall'] = True
-				self.attributes[(row + 2, col - 1)]['wall'] = True
-				self.attributes[(row + 3, col + 1)]['wall'] = True
-				self.attributes[(row + 3, col - 1)]['wall'] = True
-				for neighbor in self.grid[(row + 2, col + 1)]:
-					self.weights[((row + 2, col + 1), neighbor)] = float('inf')
-					self.weights[(neighbor, (row + 2, col + 1))] = float('inf')
-				for neighbor in self.grid[(row + 2, col - 1)]:
-					self.weights[((row + 2, col - 1), neighbor)] = float('inf')
-					self.weights[(neighbor, (row + 2, col - 1))] = float('inf')
+				self.attributes[(row + 2, col )]['wall'] = True
+				self.attributes[(row + 2, col - 2)]['wall'] = True
+				self.attributes[(row + 3, col )]['wall'] = True
+				self.attributes[(row + 3, col - 2)]['wall'] = True
+				for neighbor in self.grid[(row + 2, col )]:
+					self.weights[((row + 2, col), neighbor)] = float('inf')
+					self.weights[(neighbor, (row + 2, col ))] = float('inf')
+					# print((row + 2 , col + 1),"surround ", grid.get_edge_weights((row + 2 , col + 1)))
+				for neighbor in self.grid[(row + 2, col - 2)]:
+					self.weights[((row + 2, col - 2), neighbor)] = float('inf')
+					self.weights[(neighbor, (row + 2, col - 2))] = float('inf')
+					# print( (row + 2, col - 1), "surround ", grid.get_edge_weights( (row + 2, col - 1)))
 				for neighbor in self.grid[(row + 3, col)]:
-					self.weights[((row + 3, col +1), neighbor)] = float('inf')
+					self.weights[((row + 3, col), neighbor)] = float('inf')
 					self.weights[(neighbor, (row + 3, col))] = float('inf')
-				for neighbor in self.grid[(row + 3, col - 1)]:
-					self.weights[((row + 3, col - 1), neighbor)] = float('inf')
-					self.weights[(neighbor, (row + 3, col - 1))] = float('inf')
-				return ((row + 3, col), 'E', obstacleID)
+					# print( (row + 3, col), "surround ", grid.get_edge_weights( (row + 3, col)))
+
+				for neighbor in self.grid[(row + 3, col - 2)]:
+					self.weights[((row + 3, col - 2), neighbor)] = float('inf')
+					self.weights[(neighbor, (row + 3, col - 2))] = float('inf')
+					# print((row + 3, col -1 ), "surround ", grid.get_edge_weights((row + 3, col -1 )))
+
+				return ((row + 3, col-1), 'E', obstacleID)
 			except KeyError:
 				if col + 1 >= 21:
-					self.attributes[(row + 2, col - 1)]['wall'] = True
-					self.attributes[(row + 3, col - 1)]['wall'] = True
-					for neighbor in self.grid[(row + 2, col - 1)]:
-						self.weights[((row + 2, col - 1), neighbor)] = float('inf')
-						self.weights[(neighbor, (row + 2, col - 1))] = float('inf')
-					for neighbor in self.grid[(row + 3, col - 1)]:
-						self.weights[((row + 3, col - 1), neighbor)] = float('inf')
-						self.weights[(neighbor, (row + 3, col - 1))] = float('inf')
-					return ((row + 3, col), 'E', obstacleID)
+					self.attributes[(row + 2, col - 2)]['wall'] = True
+					self.attributes[(row + 3, col - 2)]['wall'] = True
+					for neighbor in self.grid[(row + 2, col - 2)]:
+						self.weights[((row + 2, col - 2), neighbor)] = float('inf')
+						self.weights[(neighbor, (row + 2, col - 2))] = float('inf')
+					for neighbor in self.grid[(row + 3, col - 2)]:
+						self.weights[((row + 3, col - 2), neighbor)] = float('inf')
+						self.weights[(neighbor, (row + 3, col - 2))] = float('inf')
+					return ((row + 3, col - 1), 'E', obstacleID)
 				elif col - 1 < 0:
-					self.attributes[(row + 2, col + 1)]['wall'] = True
-					self.attributes[(row + 3, col + 1)]['wall'] = True
-					for neighbor in self.grid[(row + 2, col + 1)]:
-						self.weights[((row + 2, col + 1), neighbor)] = float('inf')
-						self.weights[(neighbor, (row + 2, col + 1))] = float('inf')
-					for neighbor in self.grid[(row + 3, col + 1)]:
-						self.weights[((row + 3, col + 1), neighbor)] = float('inf')
-						self.weights[(neighbor, (row + 3, col + 1))] = float('inf')
-					return ((row + 3, col), 'E', obstacleID)
+					self.attributes[(row + 2, col )]['wall'] = True
+					self.attributes[(row + 3, col )]['wall'] = True
+					for neighbor in self.grid[(row + 2, col )]:
+						self.weights[((row + 2, col ), neighbor)] = float('inf')
+						self.weights[(neighbor, (row + 2, col ))] = float('inf')
+					for neighbor in self.grid[(row + 3, col )]:
+						self.weights[((row + 3, col), neighbor)] = float('inf')
+						self.weights[(neighbor, (row + 3, col))] = float('inf')
+					return ((row + 3, col-1), 'E', obstacleID)
 		elif side == 'W':
 			try:
 				self.attributes[(row - 1, col + 1)]['wall'] = True
@@ -251,13 +258,14 @@ class GridGraph:
 				for neighbor in self.grid[(row - 1, col - 1)]:
 					self.weights[((row - 1, col - 1), neighbor)] = float('inf')
 					self.weights[(neighbor, (row - 1, col - 1))] = float('inf')
-				for neighbor in self.grid[(row - 2, col)]:
-					self.weights[((row - 2, col ), neighbor)] = float('inf')
-					self.weights[(neighbor, (row - 2, col ))] = float('inf')
+				for neighbor in self.grid[(row - 2, col + 1)]:
+					self.weights[((row - 2, col + 1 ), neighbor)] = float('inf')
+					self.weights[(neighbor, (row - 2, col + 1 ))] = float('inf')
 				for neighbor in self.grid[(row - 2, col - 1)]:
 					self.weights[((row - 2, col - 1), neighbor)] = float('inf')
 					self.weights[(neighbor, (row - 2, col - 1))] = float('inf')
-				return ((row - 2, col + 1), 'W', obstacleID)
+# might be the issue
+				return ((row - 2, col), 'W', obstacleID)
 			except KeyError:
 				if col + 1 >= 21:
 					self.attributes[(row - 1, col - 1)]['wall'] = True
@@ -278,7 +286,7 @@ class GridGraph:
 					for neighbor in self.grid[(row - 2, col)]:
 						self.weights[((row - 2, col), neighbor)] = float('inf')
 						self.weights[(neighbor, (row - 2, col))] = float('inf')
-					return ((row - 2, col + 1), 'W', obstacleID)
+					return ((row - 2, col ), 'W', obstacleID)
 
 	def get_goals(self, obstacle_vertices):
 		return [self.get_obstacle_side_node(obstacle_vertex) for obstacle_vertex in obstacle_vertices]
@@ -302,7 +310,7 @@ class GridGraph:
 	def manhattan_distance(self, vertex1, vertex2):
 		x1, y1 = vertex1
 		x2, y2 = vertex2
-		return (abs(x1 - x2) + abs(y1 - y2))*10
+		return (abs(x1 - x2) + abs(y1 - y2)) * 10
 
 	def plot(self, path=None):
 		x_coords = [vertex[0] for vertex in self.grid.keys()]
@@ -365,8 +373,9 @@ class GridGraph:
 					continue
 				cost = g_score[current] + self.weights.get((current, neighbor), self.default_weight)
 				direction = (neighbor[0] - current[0], neighbor[1] - current[1])
-				if previous is not None and direction != previous_direction:
+				if previous is not None and direction != previous_direction: #if the direction changes, add a penalty
 					cost += 100
+
 				if neighbor not in g_score or cost < g_score[neighbor]:
 					g_score[neighbor] = cost
 					priority = cost + heuristic(neighbor)
@@ -592,17 +601,31 @@ class GridGraph:
 			return "b" #default
 
 grid = GridGraph(21, 21)
-grid.add_attribute((3,11),'obstacle','S',1)
-grid.add_attribute((3,18 ), 'obstacle', 'S', 2)
-grid.add_attribute((10,4),'obstacle', 'W', 3)
+#ADD OBSTACLE  0,19 S
+# grid.add_attribute((5, 7),'obstacle','E',1)
+# grid.add_attribute((11,15),'obstacle','W',2)
+# grid.add_attribute((16, 12),'obstacle','N',3)
+
+
+grid.add_attribute((3, 8),'obstacle','S',1)
+grid.add_attribute((9,15 ), 'obstacle', 'S', 2)
+grid.add_attribute((10, 4),'obstacle', 'N', 3)
 grid.add_attribute((13, 17), 'obstacle', 'S', 4)
-grid.add_attribute((16, 10), 'obstacle', 'N', 5)
-grid.add_attribute((18, 2), 'obstacle', 'W', 6)
+grid.add_attribute((16, 10), 'obstacle', 'W', 5)
+grid.add_attribute((18, 2), 'obstacle', 'N', 6)
 path = grid.a_star_search_multiple_obstacles((0, 2), grid.get_goals(grid.get_obstacle_vertices()))
 route = grid.movement_instructions(grid.summarize_path(path, grid.get_goals(grid.get_obstacle_vertices())), "n")
-grid.plot(	path = grid.a_star_search_multiple_obstacles((0, 2), grid.get_goals(grid.get_obstacle_vertices())))
+grid.plot(path=grid.a_star_search_multiple_obstacles((0, 2), grid.get_goals(grid.get_obstacle_vertices())))
 print(grid.get_goals(grid.get_obstacle_vertices()))
 # print(path)
 # print(route)
+# for each in path:
+# 	print(each ," s", grid.get_edge_weights(each))
 # print(grid.get_edge_weights((1,13)))
+# print(grid.get_edge_weights((1,5)))
+# print(grid.get_edge_weights((0,5)))
+# print(grid.get_edge_weights((7,12)))
+# print(grid.get_edge_weights((13,5)))
+# print(grid.get_edge_weights((13,6)))
+
 # # print
