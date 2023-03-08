@@ -173,19 +173,19 @@ class GridGraph:
 					self.weights[((row + 1, col - 2), neighbor)] = float('inf')
 					self.weights[(neighbor, (row + 1, col - 2))] = float('inf')
 				for neighbor in self.grid[(row - 1, col - 3)]:
-					self.weights[((row - 1, col - 3), neighbor)] = float('inf')
-					self.weights[(neighbor, (row - 1, col - 3))] = float('inf')
-				for neighbor in self.grid[(row, col - 3)]:
-					self.weights[((row, col - 3), neighbor)] = float('inf')
-					self.weights[(neighbor, (row, col - 3))] = float('inf')
+					self.weights[((row - 1, col - 3), neighbor)] = 9999999
+					self.weights[(neighbor, (row - 1, col - 3))] = 9999999
+				for neighbor in self.grid[(row +1, col - 3)]:
+					self.weights[((row + 1 , col - 3), neighbor)] = 9999999
+					self.weights[(neighbor, (row + 1 , col - 3))] = 9999999
 				for neighbor in self.grid[(row - 1, col - 4)]:
-					self.weights[((row - 1, col - 4), neighbor)] = float('inf')
-					self.weights[(neighbor, (row - 1, col - 4))] = float('inf')
-				for neighbor in self.grid[(row, col - 4)]:
-					self.weights[((row, col - 4), neighbor)] = 9999999
-					self.weights[(neighbor, (row, col - 4))] = 9999999
+					self.weights[((row - 1, col - 4), neighbor)] = 9999999
+					self.weights[(neighbor, (row - 1, col - 4))] = 9999999
+				for neighbor in self.grid[(row  + 1, col - 4)]:
+					self.weights[((row + 1, col - 4), neighbor)] = 9999999
+					self.weights[(neighbor, (row + 1, col - 4))] = 9999999
 
-				return ((row , col - 4),'S',	obstacleID)
+				return ((row , col - 3),'S',	obstacleID)
 			except KeyError:
 				if row - 1 < 0:
 					self.attributes[(row + 1, col - 2)]['wall'] = True
@@ -193,10 +193,10 @@ class GridGraph:
 					for neighbor in self.grid[(row + 1, col - 2)]:
 						self.weights[((row + 1, col - 2), neighbor)] = float('inf')
 						self.weights[(neighbor, (row + 1, col - 2))] = float('inf')
-					for neighbor in self.grid[(row, col - 3)]:
+					for neighbor in self.grid[(row + 1, col - 3)]:
 						self.weights[((row, col - 3), neighbor)] = float('inf')
 						self.weights[(neighbor, (row, col - 3))] = float('inf')
-					return ((row , col - 4), 'S', obstacleID)
+					return ((row , col - 3), 'S', obstacleID)
 				elif row + 1 >= 20:
 					self.attributes[(row - 1, col - 2)]['wall'] = True
 					self.attributes[(row - 1, col - 3)]['wall'] = True
@@ -206,7 +206,7 @@ class GridGraph:
 					for neighbor in self.grid[(row - 1, col - 3)]:
 						self.weights[((row - 1, col - 3), neighbor)] = float('inf')
 						self.weights[(neighbor, (row - 1, col - 3))] = float('inf')
-					return ((row, col - 4), 'S', obstacleID)
+					return ((row, col - 3), 'S', obstacleID)
 
 		elif side == 'E':
 			try:
@@ -600,17 +600,17 @@ class GridGraph:
 				return "b"
 			return "b" #default
 
-# grid = GridGraph(21, 21)
-# grid.add_attribute((8,7),'obstacle','N',1)
-# grid.add_attribute((10, 16), 'obstacle', 'W', 2)
-# grid.add_attribute((1,20),'obstacle', 'S', 5)
+grid = GridGraph(21, 21)
+grid.add_attribute((3,17),'obstacle','S',1)
+grid.add_attribute((3, 10), 'obstacle', 'S', 2)
+grid.add_attribute((13,16),'obstacle', 'S', 5)
 # grid.add_attribute((0, 15), 'obstacle', 'E', 3)
 # grid.add_attribute((11, 5), 'obstacle', 'E', 4)
 # grid.add_attribute((17, 5), 'obstacle', 'N', 4)
-# path = grid.a_star_search_multiple_obstacles((0, 2), grid.get_goals(grid.get_obstacle_vertices()))
-# route = grid.movement_instructions(grid.summarize_path(path, grid.get_goals(grid.get_obstacle_vertices())), "n")
-# grid.plot(	path = grid.a_star_search_multiple_obstacles((0, 2), grid.get_goals(grid.get_obstacle_vertices())))
-# print(grid.get_goals(grid.get_obstacle_vertices()))
+path = grid.a_star_search_multiple_obstacles((0, 2), grid.get_goals(grid.get_obstacle_vertices()))
+route = grid.movement_instructions(grid.summarize_path(path, grid.get_goals(grid.get_obstacle_vertices())), "n")
+grid.plot(	path = grid.a_star_search_multiple_obstacles((0, 2), grid.get_goals(grid.get_obstacle_vertices())))
+print(grid.get_goals(grid.get_obstacle_vertices()))
 # print(path)
 # print(route)
 # print(grid.get_edge_weights((1,13)))
