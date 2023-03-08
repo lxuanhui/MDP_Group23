@@ -133,10 +133,10 @@ class GridGraph:
 				for neighbor in self.grid[(row - 1, col + 2)]:
 					self.weights[((row - 1, col + 2), neighbor)] = float('inf')
 					self.weights[(neighbor, (row - 1, col + 2))] = float('inf')
-				for neighbor in self.grid[(row, col + 2)]:
-					self.weights[((row, col + 2), neighbor)] = float('inf')
-					self.weights[(neighbor, (row, col + 2))] = float('inf')
-				return ((row+1, col + 2),'N', obstacleID)
+				for neighbor in self.grid[(row +1, col + 2)]:
+					self.weights[((row + 1 , col + 2), neighbor)] = float('inf')
+					self.weights[(neighbor, (row + 1 , col + 2))] = float('inf')
+				return ((row, col + 2),'N', obstacleID)
 			except KeyError:
 				if row - 1 < 0:
 					self.attributes[(row + 1, col + 1)]['wall'] = True
@@ -145,9 +145,9 @@ class GridGraph:
 						self.weights[((row + 1, col + 1), neighbor)] = float('inf')
 						self.weights[(neighbor, (row + 1, col + 1))] = float('inf')
 					for neighbor in self.grid[(row, col + 2)]:
-						self.weights[((row, col + 2), neighbor)] = float('inf')
-						self.weights[(neighbor, (row, col + 2))] = float('inf')
-					return ((row + 1, col + 2), 'N', obstacleID)
+						self.weights[((row + 1 , col + 2), neighbor)] = float('inf')
+						self.weights[(neighbor, (row + 1 , col + 2))] = float('inf')
+					return ((row , col + 2), 'N', obstacleID)
 				elif row + 1 >= 20 :
 					self.attributes[(row - 1, col + 1)]['wall'] = True
 					self.attributes[(row - 1, col + 2)]['wall'] = True
@@ -257,7 +257,11 @@ class GridGraph:
 				for neighbor in self.grid[(row - 2, col - 1)]:
 					self.weights[((row - 2, col - 1), neighbor)] = float('inf')
 					self.weights[(neighbor, (row - 2, col - 1))] = float('inf')
-				return ((row - 2, col + 1), 'W', obstacleID)
+
+				for neighbor in self.grid[(row - 2, col + 1)]:
+					self.weights[((row - 2, col + 1), neighbor)] = float('inf')
+					self.weights[(neighbor, (row - 2, col + 1))] = float('inf')
+				return ((row - 2, col), 'W', obstacleID)
 			except KeyError:
 				if col + 1 >= 21:
 					self.attributes[(row - 1, col - 1)]['wall'] = True
@@ -592,12 +596,12 @@ class GridGraph:
 			return "b" #default
 
 grid = GridGraph(21, 21)
-grid.add_attribute((3,11),'obstacle','S',1)
-grid.add_attribute((3,18 ), 'obstacle', 'S', 2)
-grid.add_attribute((10,4),'obstacle', 'W', 3)
-grid.add_attribute((13, 17), 'obstacle', 'S', 4)
-grid.add_attribute((16, 10), 'obstacle', 'N', 5)
-grid.add_attribute((18, 2), 'obstacle', 'W', 6)
+grid.add_attribute((3,11),'obstacle','N',1)
+# grid.add_attribute((3,18 ), 'obstacle', 'S', 2)
+# grid.add_attribute((10,4),'obstacle', 'W', 3)
+# grid.add_attribute((13, 17), 'obstacle', 'S', 4)
+# grid.add_attribute((16, 10), 'obstacle', 'N', 5)
+# grid.add_attribute((18, 2), 'obstacle', 'W', 6)
 path = grid.a_star_search_multiple_obstacles((0, 2), grid.get_goals(grid.get_obstacle_vertices()))
 route = grid.movement_instructions(grid.summarize_path(path, grid.get_goals(grid.get_obstacle_vertices())), "n")
 grid.plot(	path = grid.a_star_search_multiple_obstacles((0, 2), grid.get_goals(grid.get_obstacle_vertices())))
