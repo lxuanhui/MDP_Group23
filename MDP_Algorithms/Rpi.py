@@ -45,20 +45,44 @@ while 1:
 
 
 
-    path = grid.a_star_search_multiple_obstacles((1, 2), grid.get_goals(grid.get_obstacle_vertices()))
+    path = grid.a_star_search_multiple_obstacles((0, 2), grid.get_goals(grid.get_obstacle_vertices()))
     route = grid.movement_instructions(grid.summarize_path(path, grid.get_goals(grid.get_obstacle_vertices())), "n")
-    for i in range(len(route)):
-        if route[i]["movement"] == "b010)" or route[i]["movement"] == "z010)":
-            if route[i + 1]["movement"] == "a010)":
-                route[i]["movement"] = "s010)"
-                route[i + 1]["movement"] = "d010)"
 
-            elif route[i + 1]["movement"] == "d010)":
-                route[i]["movement"] = "s010)"
-                route[i + 1]["movement"] = "a010)"
+    for i in range(len(route)):
+        if i < len(route):
+            if route[i]["movement"] == "b010)" or route[i]["movement"] == "z010)":
+                if route[i + 1]["movement"] == "a010)":
+                    route[i]["movement"] = "s010)"
+                    route[i + 1]["movement"] = "d010)"
+
+                elif route[i + 1]["movement"] == "d010)":
+                    route[i]["movement"] = "s010)"
+                    route[i + 1]["movement"] = "a010)"
+
+                elif route[i+1]["movement"] == "w010)":
+                    if route[i+2]["movement"] == "a010)":
+                        route[i]["movement"] ="s020)"
+                        route[i + 2]["movement"] = "d010)"
+                        route.pop(i+1)
+                    elif route[i+2]["movement"] == "d010)":
+                        route[i]["movement"] = "s020)"
+                        route[i + 2]["movement"] = "a010)"
+                        route.pop(i+1)
 
     grid.plot(path)
     print(path)
+    print(route)
+    for i in range(len(route)):
+        if route[i]["movement"] == "b010)" or route[i]["movement"] == "z010)":
+            if route[i + 2]["movement"] == "d010)":
+                if route[i+3]["movement"][0] == "w":
+                    dist = route[i+3]["movement"]
+                    value = dist[1:-1]
+                    final = int(value) + 20
+                    if final < 100:
+                        route[i+3]["movement"] = "w0"+str(final)+ ")"
+                    else:
+                        route[i+3]["movement"] = "w"+str(final) + ")"
     print(route)
     # path = []
     # dict ={'movement': 'a010)', 'obstacle': 2, 'reached': 0, 'robotPosition': [16, 12, 'n']}

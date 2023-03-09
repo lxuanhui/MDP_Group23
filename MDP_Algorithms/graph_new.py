@@ -161,23 +161,42 @@ class GridGraph:
 					return ((row, col + 2), 'N', obstacleID)
 		elif side == 'S':
 			try:
-				self.attributes[(row - 1, col - 2)]['wall'] = True
-				self.attributes[(row + 1, col - 2)]['wall'] = True
-				self.attributes[(row - 1, col - 3)]['wall'] = True
-				self.attributes[(row + 1, col - 3)]['wall'] = True
-				for neighbor in self.grid[(row - 1, col - 2)]:
-					self.weights[((row - 1, col - 2), neighbor)] = float('inf')
-					self.weights[(neighbor, (row - 1, col - 2))] = float('inf')
-				for neighbor in self.grid[(row + 1, col - 2)]:
-					self.weights[((row + 1, col - 2), neighbor)] = float('inf')
-					self.weights[(neighbor, (row + 1, col - 2))] = float('inf')
-				for neighbor in self.grid[(row - 1, col - 3)]:
-					self.weights[((row - 1, col - 3), neighbor)] = float('inf')
-					self.weights[(neighbor, (row - 1, col - 3))] = float('inf')
-				for neighbor in self.grid[(row+1, col - 3)]:
-					self.weights[((row+1, col - 3), neighbor)] = float('inf')
-					self.weights[(neighbor, (row+1, col - 3))] = float('inf')
-				return ((row , col - 3),'S',	obstacleID)
+				if row  >= 19:
+					self.attributes[(row - 2, col - 2)]['wall'] = True
+					self.attributes[(row, col - 2)]['wall'] = True
+					self.attributes[(row - 2, col - 3)]['wall'] = True
+					self.attributes[(row , col - 3)]['wall'] = True
+					for neighbor in self.grid[(row - 2, col - 2)]:
+						self.weights[((row - 2, col - 2), neighbor)] = float('inf')
+						self.weights[(neighbor, (row - 2, col - 2))] = float('inf')
+					for neighbor in self.grid[(row , col - 2)]:
+						self.weights[((row , col - 2), neighbor)] = float('inf')
+						self.weights[(neighbor, (row , col - 2))] = float('inf')
+					for neighbor in self.grid[(row - 2, col - 3)]:
+						self.weights[((row - 2, col - 3), neighbor)] = float('inf')
+						self.weights[(neighbor, (row - 2, col - 3))] = float('inf')
+					for neighbor in self.grid[(row , col - 3)]:
+						self.weights[((row , col - 3), neighbor)] = float('inf')
+						self.weights[(neighbor, (row , col - 3))] = float('inf')
+					return ((row - 1, col - 3), 'S', obstacleID)
+				else:
+					self.attributes[(row - 1, col - 2)]['wall'] = True
+					self.attributes[(row + 1, col - 2)]['wall'] = True
+					self.attributes[(row - 1, col - 3)]['wall'] = True
+					self.attributes[(row + 1, col - 3)]['wall'] = True
+					for neighbor in self.grid[(row - 1, col - 2)]:
+						self.weights[((row - 1, col - 2), neighbor)] = float('inf')
+						self.weights[(neighbor, (row - 1, col - 2))] = float('inf')
+					for neighbor in self.grid[(row + 1, col - 2)]:
+						self.weights[((row + 1, col - 2), neighbor)] = float('inf')
+						self.weights[(neighbor, (row + 1, col - 2))] = float('inf')
+					for neighbor in self.grid[(row - 1, col - 3)]:
+						self.weights[((row - 1, col - 3), neighbor)] = float('inf')
+						self.weights[(neighbor, (row - 1, col - 3))] = float('inf')
+					for neighbor in self.grid[(row+1, col - 3)]:
+						self.weights[((row+1, col - 3), neighbor)] = float('inf')
+						self.weights[(neighbor, (row+1, col - 3))] = float('inf')
+					return ((row , col - 3),'S',	obstacleID)
 			except KeyError:
 				if row - 1 < 0:
 					self.attributes[(row + 1, col - 2)]['wall'] = True
@@ -393,6 +412,7 @@ class GridGraph:
 	# loop a_star search for each obstacle side node and return the shortest path
 	def get_shortest_path(self, start, goals):
 		paths = []
+
 		for goal in goals:
 			path = self.a_star(start, goal[0])
 			if path is not None:
@@ -406,6 +426,7 @@ class GridGraph:
 
 		final_path = []
 		counter = 0
+
 		# while counter < len(goals):
 		while True:
 			path = self.get_shortest_path(start, goals)
@@ -606,18 +627,19 @@ class GridGraph:
 # grid.add_attribute((11,15),'obstacle','W',2)
 # grid.add_attribute((16, 12),'obstacle','N',3)
 
-
-# grid.add_attribute((3, 8),'obstacle','S',1)
-# grid.add_attribute((9,15 ), 'obstacle', 'S', 2)
-# grid.add_attribute((10, 4),'obstacle', 'N', 3)
+#
+# grid.add_attribute((18, 2),'obstacle','W',1)
+# grid.add_attribute((4,12 ), 'obstacle', 'S', 2)
+# grid.add_attribute((10, 4),'obstacle', 'W', 3)
 # grid.add_attribute((13, 17), 'obstacle', 'S', 4)
-# grid.add_attribute((16, 10), 'obstacle', 'W', 5)
-# grid.add_attribute((18, 2), 'obstacle', 'N', 6)
+# grid.add_attribute((3, 18), 'obstacle', 'S', 5)
+# grid.add_attribute((16, 11), 'obstacle', 'N', 6)
 # path = grid.a_star_search_multiple_obstacles((0, 2), grid.get_goals(grid.get_obstacle_vertices()))
 # route = grid.movement_instructions(grid.summarize_path(path, grid.get_goals(grid.get_obstacle_vertices())), "n")
 # grid.plot(path=grid.a_star_search_multiple_obstacles((0, 2), grid.get_goals(grid.get_obstacle_vertices())))
 # print(grid.get_goals(grid.get_obstacle_vertices()))
 # print(path)
+# print(len(route))
 # print(route)
 #
 # print("new " , route)
