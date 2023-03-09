@@ -575,29 +575,29 @@ class GridGraph:
 
 	def check_next_direction(self, current_direction, next_direction):
 		if current_direction == "n" and next_direction == "e":
-			return "d"
+			return "r"
 		elif current_direction == "n" and next_direction == "w" and self.y>= 18:
 			return "q"
 		elif current_direction == "n" and next_direction == "w":
-			return "a"
+			return "q"
 		elif current_direction == "s" and next_direction == "e" and self.y <= 2:
 			return "q"
 		elif current_direction == "s" and next_direction == "e":
-			return "a"
+			return "q"
 		elif current_direction == "s" and next_direction == "w":
-			return "d"
+			return "r"
 		elif current_direction == "e" and next_direction == "n" and self.x >= 18:
 			return "q"
 		elif current_direction == "e" and next_direction == "n":
-			return "a"
+			return "q"
 		elif current_direction == "e" and next_direction == "s":
-			return "d"
+			return "r"
 		elif current_direction == "w" and next_direction == "n":
-			return "d"
+			return "r"
 		elif current_direction == "w" and next_direction == "s" and self. x <= 2:
 			return "q"
 		elif current_direction == "w" and next_direction == "s":
-			return "a"
+			return "q"
 		else:
 			#TODO make the reverse z or b. z is for clockwise and b is for anti clockwise
 			if current_direction == "n" and self.x <= 2:

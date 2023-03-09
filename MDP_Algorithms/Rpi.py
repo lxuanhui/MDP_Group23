@@ -51,30 +51,30 @@ while 1:
     for i in range(len(route)):
         if i < len(route):
             if route[i]["movement"] == "b010)" or route[i]["movement"] == "z010)":
-                if route[i + 1]["movement"] == "a010)":
+                if route[i + 1]["movement"] == "q010)":
                     route[i]["movement"] = "s010)"
-                    route[i + 1]["movement"] = "d010)"
+                    route[i + 1]["movement"] = "r010)"
 
-                elif route[i + 1]["movement"] == "d010)":
+                elif route[i + 1]["movement"] == "r010)":
                     route[i]["movement"] = "s010)"
-                    route[i + 1]["movement"] = "a010)"
+                    route[i + 1]["movement"] = "q010)"
 
                 elif route[i+1]["movement"] == "w010)":
-                    if route[i+2]["movement"] == "a010)":
+                    if route[i+2]["movement"] == "q010)":
                         route[i]["movement"] ="s020)"
-                        route[i + 2]["movement"] = "d010)"
+                        route[i + 2]["movement"] = "r010)"
                         route.pop(i+1)
-                    elif route[i+2]["movement"] == "d010)":
+                    elif route[i+2]["movement"] == "r010)":
                         route[i]["movement"] = "s020)"
-                        route[i + 2]["movement"] = "a010)"
+                        route[i + 2]["movement"] = "q010)"
                         route.pop(i+1)
 
     grid.plot(path)
     print(path)
     print(route)
-    for i in range(len(route)):
+    for i in range(len(route)):  #compenstation for 180
         if route[i]["movement"] == "b010)" or route[i]["movement"] == "z010)":
-            if route[i + 2]["movement"] == "d010)":
+            if route[i + 2]["movement"] == "r010)":
                 if route[i+3]["movement"][0] == "w":
                     dist = route[i+3]["movement"]
                     value = dist[1:-1]
