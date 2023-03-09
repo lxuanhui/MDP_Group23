@@ -161,42 +161,23 @@ class GridGraph:
 					return ((row, col + 2), 'N', obstacleID)
 		elif side == 'S':
 			try:
-				if row  >= 19:
-					self.attributes[(row - 2, col - 2)]['wall'] = True
-					self.attributes[(row, col - 2)]['wall'] = True
-					self.attributes[(row - 2, col - 3)]['wall'] = True
-					self.attributes[(row , col - 3)]['wall'] = True
-					for neighbor in self.grid[(row - 2, col - 2)]:
-						self.weights[((row - 2, col - 2), neighbor)] = float('inf')
-						self.weights[(neighbor, (row - 2, col - 2))] = float('inf')
-					for neighbor in self.grid[(row , col - 2)]:
-						self.weights[((row , col - 2), neighbor)] = float('inf')
-						self.weights[(neighbor, (row , col - 2))] = float('inf')
-					for neighbor in self.grid[(row - 2, col - 3)]:
-						self.weights[((row - 2, col - 3), neighbor)] = float('inf')
-						self.weights[(neighbor, (row - 2, col - 3))] = float('inf')
-					for neighbor in self.grid[(row , col - 3)]:
-						self.weights[((row , col - 3), neighbor)] = float('inf')
-						self.weights[(neighbor, (row , col - 3))] = float('inf')
-					return ((row - 1, col - 3), 'S', obstacleID)
-				else:
-					self.attributes[(row - 1, col - 2)]['wall'] = True
-					self.attributes[(row + 1, col - 2)]['wall'] = True
-					self.attributes[(row - 1, col - 3)]['wall'] = True
-					self.attributes[(row + 1, col - 3)]['wall'] = True
-					for neighbor in self.grid[(row - 1, col - 2)]:
-						self.weights[((row - 1, col - 2), neighbor)] = float('inf')
-						self.weights[(neighbor, (row - 1, col - 2))] = float('inf')
-					for neighbor in self.grid[(row + 1, col - 2)]:
-						self.weights[((row + 1, col - 2), neighbor)] = float('inf')
-						self.weights[(neighbor, (row + 1, col - 2))] = float('inf')
-					for neighbor in self.grid[(row - 1, col - 3)]:
-						self.weights[((row - 1, col - 3), neighbor)] = float('inf')
-						self.weights[(neighbor, (row - 1, col - 3))] = float('inf')
-					for neighbor in self.grid[(row+1, col - 3)]:
-						self.weights[((row+1, col - 3), neighbor)] = float('inf')
-						self.weights[(neighbor, (row+1, col - 3))] = float('inf')
-					return ((row , col - 3),'S',	obstacleID)
+				self.attributes[(row - 1, col - 2)]['wall'] = True
+				self.attributes[(row + 1, col - 2)]['wall'] = True
+				self.attributes[(row - 1, col - 3)]['wall'] = True
+				self.attributes[(row + 1, col - 3)]['wall'] = True
+				for neighbor in self.grid[(row - 1, col - 2)]:
+					self.weights[((row - 1, col - 2), neighbor)] = float('inf')
+					self.weights[(neighbor, (row - 1, col - 2))] = float('inf')
+				for neighbor in self.grid[(row + 1, col - 2)]:
+					self.weights[((row + 1, col - 2), neighbor)] = float('inf')
+					self.weights[(neighbor, (row + 1, col - 2))] = float('inf')
+				for neighbor in self.grid[(row - 1, col - 3)]:
+					self.weights[((row - 1, col - 3), neighbor)] = float('inf')
+					self.weights[(neighbor, (row - 1, col - 3))] = float('inf')
+				for neighbor in self.grid[(row+1, col - 3)]:
+					self.weights[((row+1, col - 3), neighbor)] = float('inf')
+					self.weights[(neighbor, (row+1, col - 3))] = float('inf')
+				return ((row , col - 3),'S',	obstacleID)
 			except KeyError:
 				if row - 1 < 0:
 					self.attributes[(row + 1, col - 2)]['wall'] = True
@@ -595,18 +576,26 @@ class GridGraph:
 	def check_next_direction(self, current_direction, next_direction):
 		if current_direction == "n" and next_direction == "e":
 			return "d"
+		elif current_direction == "n" and next_direction == "w" and self.y>= 18:
+			return "q"
 		elif current_direction == "n" and next_direction == "w":
 			return "a"
+		elif current_direction == "s" and next_direction == "e" and self.y <= 2:
+			return "q"
 		elif current_direction == "s" and next_direction == "e":
 			return "a"
 		elif current_direction == "s" and next_direction == "w":
 			return "d"
+		elif current_direction == "e" and next_direction == "n" and self.x >= 18:
+			return "q"
 		elif current_direction == "e" and next_direction == "n":
 			return "a"
 		elif current_direction == "e" and next_direction == "s":
 			return "d"
 		elif current_direction == "w" and next_direction == "n":
 			return "d"
+		elif current_direction == "w" and next_direction == "s" and self. x <= 2:
+			return "q"
 		elif current_direction == "w" and next_direction == "s":
 			return "a"
 		else:
