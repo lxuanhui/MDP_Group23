@@ -6,16 +6,16 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,24 +32,21 @@ import com.example.mdp.bluetooth.BluetoothFragment;
 import com.example.mdp.bluetooth.OnBluetoothReadReceivedListener;
 import com.example.mdp.bluetooth.OnBluetoothStateChangedListener;
 import com.example.mdp.bluetooth.receivers.BluetoothConnectionStateBroadcastReceiver;
-import com.example.mdp.bluetooth.receivers.BluetoothDiscoveryBroadcastReceiver;
 import com.example.mdp.bluetooth.receivers.BluetoothScanBroadcastReceiver;
 import com.example.mdp.bluetooth.receivers.BluetoothStateBroadcastReceiver;
 import com.example.mdp.bluetooth.service.BluetoothService;
 import com.example.mdp.databinding.ActivityMainBinding;
 
 import com.example.mdp.arena.*;
+import com.example.mdp.timer.TimerFragment;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Map;
 
 
 public class MainActivity extends AppCompatActivity implements  OnDataPass, OnRemoteClickListener {
@@ -69,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements  OnDataPass, OnRe
     Directions carDir;
     int[] carCoord = new int[2];
     TextView carDirText, carXText, carYText;
-    TextView robotStatus;
+    static TextView robotStatus;
     int[][] obstacles = new int[20][4];
     //obstacle[obsid] = [obsid, x, y, imgdir]
 
@@ -78,12 +75,19 @@ public class MainActivity extends AppCompatActivity implements  OnDataPass, OnRe
     ImageButton reset;
     private SharedViewModel model;
 
+    //Timer
+    final Handler handler = new Handler();
+    private static final String TAG = "Main Activity";
+    public static boolean stopTimerFlag = false;
+    public static boolean stopWk9TimerFlag = false;
+
     private BluetoothService bluetoothService;
     private OnBluetoothReadReceivedListener chatReadListener;
 
     private BluetoothConnectionStateBroadcastReceiver connectionStateBroadcastReceiver;
     private BluetoothScanBroadcastReceiver scanBroadcastReceiver;
     private BluetoothStateBroadcastReceiver stateBroadcastReceiver;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements  OnDataPass, OnRe
         TabLayout tabLayout = findViewById(R.id.tabs);
 
         // Attach the TabLayout to the ViewPager2 using the TabLayoutMediator
-        String[] tabNames = { "Map", "Chat"};
+        String[] tabNames = { "Map", "Chat", "Timer"};
         new TabLayoutMediator(tabLayout, viewPager,
                 (tab, position) -> tab.setText(tabNames[position])).attach();
 
@@ -206,6 +210,26 @@ public class MainActivity extends AppCompatActivity implements  OnDataPass, OnRe
                         changeImgId(obsID, imgId);
                     } catch (JSONException e) {
                         // throw new RuntimeException(e);
+                    }
+                }
+                else if (message.equals("End Challenge")) {
+                    // if wk 8 btn is checked, means running wk 8 challenge and likewise for wk 9
+                    // end the corresponding timer
+                    ToggleButton exploreButton = findViewById(R.id.exploreToggleBtn2);
+                    ToggleButton fastestButton = findViewById(R.id.fastestToggleBtn2);
+
+                    if (exploreButton.isChecked()) {
+                        showLog("explorebutton is checked");
+                        stopTimerFlag = true;
+                        exploreButton.setChecked(false);
+                        robotStatus.setText("Auto Movement/ImageRecog Stopped");
+                        TimerFragment.timerHandler.removeCallbacks(TimerFragment.timerRunnableExplore);
+                    } else if (fastestButton.isChecked()) {
+                        showLog("fastestbutton is checked");
+                        stopTimerFlag = true;
+                        fastestButton.setChecked(false);
+                        robotStatus.setText("Week 9 Stopped");
+                        TimerFragment.timerHandler.removeCallbacks(TimerFragment.timerRunnableFastest);
                     }
                 }
                 chatReadListener.onBluetoothReadReceived(message);
@@ -280,6 +304,16 @@ public class MainActivity extends AppCompatActivity implements  OnDataPass, OnRe
         connectionStateBroadcastReceiver = new BluetoothConnectionStateBroadcastReceiver();
         registerReceiver(connectionStateBroadcastReceiver, new IntentFilter(BluetoothAdapter.ACTION_CONNECTION_STATE_CHANGED));
     }
+    // Timer
+    public static TextView getRobotStatusTextView(){
+        return robotStatus;
+    };
+    private static void showLog(String message) {
+        Log.d(TAG, message);
+    }
+//    public static void printMessage(String message){
+//        bluetoothService.write(message);
+//    }
 
     // ARENA
 
@@ -383,11 +417,19 @@ public class MainActivity extends AppCompatActivity implements  OnDataPass, OnRe
                         break;
                 }
                 String ObsMsgString = Integer.toString(obsidm) + ", " + Arrays.toString(obsCoordm) + ", " + imgDirm;
+<<<<<<< HEAD
                 bluetoothService.write("obstacle ["+ObsMsgString+"]"); // String msg: obstacle [<obsid> , [<x> , <y>], <imgdir>]
 //                bluetoothService.write( "obstacle "+ Arrays.toString(obsInfo) +"\n"); // String msg: obstacle [<obsid> , <x> , <y>, <imgdir>]
 
 
                 System.out.println("obstacle ["+ObsMsgString+"]");
+=======
+                bluetoothService.write("{\"obstacle\" ["+ObsMsgString+"]}"); // String msg: {"obstacle": [<obsid> , [<x> , <y>], <imgdir>]}
+//                bluetoothService.write( "obstacle "+ Arrays.toString(obsInfo) +"\n"); // String msg: obstacle [<obsid> , <x> , <y>, <imgdir>]
+
+
+                System.out.println("{\"obstacle\": ["+ObsMsgString+"]}");
+>>>>>>> 83b415ac926812d70846481ae999da5c8fbef8e3
             }
             // put x, y coord in a tuple
             // send directions as , N,S, W,E
@@ -410,6 +452,9 @@ public class MainActivity extends AppCompatActivity implements  OnDataPass, OnRe
 
     @Override
     public void OnSetCarDir() {
+//        changeImgId(3, 34); // sets on 2 click, first click toggles
+
+
         car = carPlayer.getCar();
         carCoord = carPlayer.getCarCoord();
         carDir = carPlayer.getCarDir();
