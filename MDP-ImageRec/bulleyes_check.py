@@ -1,8 +1,8 @@
 import os
 import socket
+import imagesize
 
-from bullseye_checker import imagerec
-
+from bullseye_checker import imagerec, do_tiling
 
 if __name__ == "__main__":
     # CONFIGURATIONS: remember to change
@@ -15,6 +15,8 @@ if __name__ == "__main__":
     host = socket.gethostbyname(socket.gethostname())
     print(host)
     server.listen()
+
+    num_photos = 0
 
     while True:
         client_socket, client_address = server.accept()  # Accepts client addrprint("Client addr: ", client_address, "Connected")
@@ -29,6 +31,14 @@ if __name__ == "__main__":
 
         file.close()
 
+        # TODO: When entire image rec process is done, need to show tiled image!!
+        # RPI needs to send me something, then I trigger POST request to tile image??
+        # actually, don't even need post request?
+        width, height = imagesize.get('server_image.jpg')
+        if width == 64 and height == 64:
+            client_socket.close()
+            break  # dont do image rec if it's the small square photo sent
+
         # do image rec
         print("Doing image rec..")
         # image_id = imagerec('server_image.jpg')
@@ -41,4 +51,11 @@ if __name__ == "__main__":
         # print("image id sent success")
         print("testq")
 
+        num_photos += 1
+
         client_socket.close()
+
+    # trigger the tiling, but need the number of images captured!! How to get ahhh
+    print("TILING TRIGGERED")
+    # print(do_tiling(num_photos))
+    do_tiling(num_photos)

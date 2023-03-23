@@ -5,6 +5,14 @@ import requests
 import json
 
 
+def do_tiling(num_photos):
+    # Set the URL of the predict endpoint
+    url = 'http://localhost:5000/showtiled'
+    response = requests.post(url, json={"num_photos": num_photos})
+    print("HELLO", response.content.decode())
+    # return json.loads(response.content.decode())
+
+
 def imagerec(image_path):
     # Set the URL of the predict endpoint
     url = 'http://localhost:5000/predict'
@@ -15,7 +23,6 @@ def imagerec(image_path):
     with open(image_path, 'rb') as f:
         image_bytes = f.read()
 
-
     # Create a dictionary of files to send with the request
     files = {'image': ('image.jpg', image_bytes)}
 
@@ -25,7 +32,7 @@ def imagerec(image_path):
     # Parse the JSON response
     result = json.loads(response.content.decode())
 
-    print("Printing results:" , result)
+    print("Printing results:", result)
     # return result
 
     with open('imagerec_result.txt', 'w') as f:
@@ -65,4 +72,3 @@ def imagerec(image_path):
     #     # Parse the JSON response
     #     result = json.loads(response.content.decode())
     #     print(file_name, result)
-
